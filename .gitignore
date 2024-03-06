@@ -1,0 +1,11 @@
+dist
+__pycache__/
+**/__pycache__/
+.vs/
+*.DS_Store
+*.pyc
+*.pyo
+*.egg-info
+*.log
+*.so
+test.py
