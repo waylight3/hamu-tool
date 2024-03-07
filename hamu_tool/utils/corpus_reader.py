@@ -45,11 +45,11 @@ class CorpusReader:
 
     def __getitem__(self, index : int | str) -> dict:
         """
-            Fetch a document by its ID (str) or index (int).
+            Fetch a document by its ID (str) or index (int) in dict format.
         Args:
             index (int | str): The ID (str) or index (int) of the document.
         Returns:
-            dict: The fetched document.
+            dict: The fetched document in dict format.
         """
         idx = self.idx_list[index] if isinstance(index, int) else index
         if not self.__contain__(idx):
@@ -57,6 +57,21 @@ class CorpusReader:
         doc = self.mm[self.data_offset+self.index[idx]['start']:self.data_offset+self.index[idx]['end']]
         doc = doc.decode()
         doc = json.loads(doc)
+        return doc
+
+    def raw(self, index : int | str) -> str:
+        """
+            Fetch a document by its ID (str) or index (int) in raw string format.
+        Args:
+            index (int | str): The ID (str) or index (int) of the document.
+        Returns:
+            str: The fetched document in raw string format.
+        """
+        idx = self.idx_list[index] if isinstance(index, int) else index
+        if not self.__contain__(idx):
+            raise KeyError(f'Index or ID not found: [{idx}]')
+        doc = self.mm[self.data_offset+self.index[idx]['start']:self.data_offset+self.index[idx]['end']]
+        doc = doc.decode()
         return doc
 
     def __len__(self) -> int:
