@@ -43,13 +43,13 @@ class CorpusReader:
         self.mm.close()
         self.fp.close()
 
-    def __getitem__(self, index : int | str) -> str:
+    def __getitem__(self, index : int | str) -> dict:
         """
             Fetch a document by its ID (str) or index (int).
         Args:
             index (int | str): The ID (str) or index (int) of the document.
         Returns:
-            str: The fetched document.
+            dict: The fetched document.
         """
         idx = self.idx_list[index] if isinstance(index, int) else index
         if not self.__contain__(idx):
