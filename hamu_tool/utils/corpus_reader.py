@@ -109,19 +109,18 @@ class CorpusReader:
             yield {'id': idx, 'content': self[idx]}
 
     @staticmethod
-    def to_str(data):
+    def to_str(data : any) -> str:
         """
             Convert the given data into string representation.
         Args:
-            data (str | list): Data to convert.
+            data (any): Data to convert.
         Returns:
             str: String converted version of the given data.
         """
         if isinstance(data, str):
             return data
-        if isinstance(data, list):
-            return ' '.join([str(d) for d in data])
-        return str(data)
+        data = json.dumps(data, ensure_ascii=False, separators=(',', ':'))
+        return data
 
     @staticmethod
     def build_index(data_path : str, index_path : str, idx_field : str = 'id', verbose : bool = False):
