@@ -56,6 +56,7 @@ class CorpusReader:
             raise KeyError(f'Index or ID not found: [{idx}]')
         doc = self.mm[self.data_offset+self.index[idx]['start']:self.data_offset+self.index[idx]['end']]
         doc = doc.decode()
+        doc = json.loads(doc)
         return doc
 
     def __len__(self) -> int:
