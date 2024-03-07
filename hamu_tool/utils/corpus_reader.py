@@ -124,14 +124,13 @@ class CorpusReader:
         return str(data)
 
     @staticmethod
-    def build_index(data_path : str, index_path : str, idx_field : str = 'id', content_fields : list[str] = ['content'], verbose : bool = False):
+    def build_index(data_path : str, index_path : str, idx_field : str = 'id', verbose : bool = False):
         """
             Build an index file for the given data file.
         Args:
             data_path (str): Path of the data file (jsonl type).
             index_path (str): Path of the index file to be created.
-            idx_field (str): Field of the data file to be used as the ID (str) of the documents.
-            content_fields (list[str]): Fields of the data file to be indexed.
+            idx_field (str): Field of the data file to be used as the ID (str) of the documents. Defaults to 'id'.
             verbose (bool, optional): Wheather to print the progress status or not. Defaults to False.
         """
         # Create index and data files
@@ -142,13 +141,13 @@ class CorpusReader:
             for line in fp:
                 data = json.loads(line)
                 idx = data[idx_field]
-                doc = ' '.join([CorpusReader.to_str(data[key]) for key in content_fields]).strip()
-                doc = unidecode.unidecode(doc)
-                fp_data.write(doc)
-                fp_idx.write(f'{idx}\t{cnt}\t{cnt + len(doc)}\n')
-                cnt += len(doc)
+                content = json.dumps(data, ensure_ascii=False, separators=(',', ':'))
+                content = unidecode.unidecode(content)
+                fp_data.write(content)
+                fp_idx.write(f'{idx}\t{cnt}\t{cnt + len(content)}\n')
+                cnt += len(content)
                 cnt_doc += 1
-                if verbose and cnt_doc % 10000 == 0:
+                if verbose and cnt_doc % 100 == 0:
                     now = datetime.datetime.now().strftime('%H:%M:%S')
                     print(f'[ {now} ] Corpus Reader | file: {file_name} | reading documents | doc: {cnt_doc:,} |', end='\r', flush=True)
             if verbose:
@@ -160,7 +159,7 @@ class CorpusReader:
         with open(f'{index_path}', 'a', encoding='utf-8') as fp_idx, open(f'{index_path}.data', 'r', encoding='utf-8') as fp_data:
             for line in fp_data:
                 fp_idx.write(line)
-                if verbose and cnt_doc % 10000 == 0:
+                if verbose and cnt_doc % 100 == 0:
                     now = datetime.datetime.now().strftime('%H:%M:%S')
                     print(f'[ {now} ] Corpus Reader | file: {file_name} | merging index |', end='\r', flush=True)
             if verbose:

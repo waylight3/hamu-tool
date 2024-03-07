@@ -1,2 +1,2 @@
-from .bib_extractor import BibExtractor
+from .bib_extractor import BIBExtractor
 from .corpus_reader import CorpusReader
