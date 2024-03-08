@@ -4,7 +4,7 @@ import glob
 import os
 import requests
 import tempfile
-import requests
+import urllib.parse
 
 class DataLoaderBase:
     """Base class for DataLoader
@@ -37,7 +37,7 @@ class DataLoaderBase:
         Returns:
             list[str]: List of download urls for the dataset.
         """
-        res = requests.get(f'http://research.hamu.me/dataset/api/get_download_url/{dataset_name}/')
+        res = requests.get(f'http://research.hamu.me/dataset/api/get_download_url/{urllib.parse.quote(dataset_name, safe="")}/')
         if res.status_code == 200:
             data = res.json()
             download_urls = data['download_url'].split('\n')
@@ -95,7 +95,7 @@ class DataLoaderQDRBase(DataLoaderBase):
                     if qid not in self.qrel[mode]:
                         self.qrel[mode][qid] = []
                     self.qrel[mode][qid].append((did, int(score)))
-                    self.qrel_list[mode][(qid, did)] = int(score)
+                    self.qrel_list[mode].append((qid, did, int(score)))
 
     def get_doc(self, did : str | int) -> str:
         """Fetch a document by its ID.

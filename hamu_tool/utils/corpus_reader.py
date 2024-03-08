@@ -25,8 +25,8 @@ class CorpusReader:
         with open(f'{self.index_path}', 'r', encoding='utf-8') as fp:
             for line in fp:
                 self.data_offset += len(line)
-                if not line.endswith('\r\n'):
-                    self.data_offset += 1
+                # if not line.endswith('\r\n'):
+                #     self.data_offset += 1
                 idx, start_idx, end_idx = line.strip().split('\t')
                 if (idx, start_idx, end_idx) == ('0', '0', '0'):
                     break
@@ -122,7 +122,7 @@ class CorpusReader:
             iter: An iterator for the corpus reader.
         """
         for idx in self.idx_list:
-            yield {'id': idx, 'content': self[idx]}
+            yield self[idx]
 
     @staticmethod
     def to_str(data : any) -> str:
