@@ -1,7 +1,11 @@
+from .arguana_data_loader import ArguanaDataLoader
 from .fiqa_data_loader import FiQADataLoader
 from .nfcorpus_data_loader import NFCorpusDataLoader
+from .robust04_data_loader import Robust04DataLoader
 from .scidocs_data_loader import SciDocsDataLoader
 from .scifact_data_loader import SciFactDataLoader
+from .trec_covid_data_loader import TrecCovidDataLoader
+from .webis_touche_2020_data_loader import WebisTouche2020DataLoader
 import requests
 
 class DataLoader:
