@@ -1,5 +1,6 @@
 from ..utils.corpus_reader import CorpusReader
 from typing import Iterator
+import glob
 import os
 import requests
 import tempfile
@@ -80,16 +81,21 @@ class DataLoaderQDRBase(DataLoaderBase):
         """
         super().__init__(dataset_name)
         self.reader_doc = CorpusReader(f'{self.data_dir}/doc.idx')
-        self.reader_query = CorpusReader(f'{self.data_dir}/query.test.idx')
+        self.reader_query = CorpusReader(f'{self.data_dir}/query.idx')
         self.qrel = {}
-        self.qrel_list = []
-        with open(f'{self.data_dir}/qrel.test.tsv') as fp:
-            for line in fp:
-                qid, _, did, score = line.strip().split()
-                if qid not in self.qrel:
-                    self.qrel[qid] = []
-                self.qrel[qid].append((did, int(score)))
-                self.qrel_list.append((qid, did, int(score)))
+        self.qrel_list = {}
+        qrel_paths = glob.glob(f'{self.data_dir}/qrel.*.tsv')
+        for qrel_path in qrel_paths:
+            mode = qrel_path.split('.')[-2]
+            self.qrel[mode] = {}
+            self.qrel_list[mode] = []
+            with open(qrel_path, 'r', encoding='utf-8') as fp:
+                for line in fp:
+                    qid, _, did, score = line.strip().split()
+                    if qid not in self.qrel[mode]:
+                        self.qrel[mode][qid] = []
+                    self.qrel[mode][qid].append((did, int(score)))
+                    self.qrel_list[mode][(qid, did)] = int(score)
 
     def get_doc(self, did : str | int) -> str:
         """Fetch a document by its ID.
@@ -102,7 +108,7 @@ class DataLoaderQDRBase(DataLoaderBase):
         """
         return self.reader_doc[did]
 
-    def docs(self) -> Iterator[dict[str, str]]:
+    def get_docs(self) -> Iterator[dict[str, str]]:
         """Iterator for documents in the dataset.
 
         Yields:
@@ -122,7 +128,7 @@ class DataLoaderQDRBase(DataLoaderBase):
         """
         return self.reader_query[qid]
 
-    def queries(self) -> Iterator[dict[str, str]]:
+    def get_queries(self) -> Iterator[dict[str, str]]:
         """Iterator for queries in the dataset.
 
         Yields:
@@ -131,11 +137,12 @@ class DataLoaderQDRBase(DataLoaderBase):
         for it in self.reader_query:
             yield it
 
-    def get_qrel(self, qid : str, with_score : bool = False) -> list[str] | list[tuple[str, int]]:
+    def get_qrel(self, qid : str, mode : str, with_score : bool = False) -> list[str] | list[tuple[str, int]]:
         """Fetch the qrel for the given query ID.
 
         Args:
             qid (str): The ID of the query.
+            mode (str): The mode of the qrel such as 'train', 'dev', or 'test'. Check the document for each dataset.
             with_score (bool, optional): Whether to include the score in the qrel. Defaults to False.
 
         Raises:
@@ -145,17 +152,20 @@ class DataLoaderQDRBase(DataLoaderBase):
             list[str]: When with_score is False. List of relevant document IDs for the query.
             list[tuple[str, int]]: When with_score is True. List of relevant document IDs and their scores for the query.
         """
-        if qid not in self.qrel:
+        if qid not in self.qrel[mode]:
             raise Exception(f'Qrel for query [{qid}] not found')
         if with_score:
-            return self.qrel[qid]
-        return [did for did, _ in self.qrel[qid]]
+            return self.qrel[mode][qid]
+        return [did for did, _ in self.qrel[mode][qid]]
 
-    def qrels(self) -> Iterator[dict[str, any]]:
+    def get_qrels(self, mode : str) -> Iterator[dict[str, any]]:
         """Iterator for qrels in the dataset.
+
+        Args:
+            mode (str): The mode of the qrel such as 'train', 'dev', or 'test'. Check the document for each dataset.
 
         Yields:
             Iterator[dict[str, any]]: Iterator for qrels in the dataset.
         """
-        for qid, did, score in self.qrel_list:
+        for qid, did, score in self.qrel_list[mode]:
             yield {'qid': qid, 'did': did, 'score': score}
