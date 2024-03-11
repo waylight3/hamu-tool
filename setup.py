@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='hamu-tool',
-    version='0.0.1',
+    version='0.0.2',
     description='Many useful tools for computer scientists!',
     license='MIT',
     author='DoHyeon Lee',
@@ -10,7 +10,7 @@ setup(
     url='https://github.com/waylight3/hamu-tool',
     keywords=['hamu', 'tool', 'computer', 'science', 'useful', 'toolkit', 'library', 'python', 'package', 'module', 'utility', 'function', 'class', 'method'],
     install_requires=['unidecode >= 1.2.0'],
-    python_requires='>=3.11'
+    python_requires='>=3.11',
     packages=find_packages(),
     zip_safe=False
 )
