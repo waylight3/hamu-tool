@@ -3,23 +3,27 @@ from typing import Iterator
 import glob
 import os
 import requests
+import shutil
 import tempfile
 import urllib.parse
 
 class DataLoaderBase:
     """Base class for DataLoader
     """
-    def __init__(self, dataset_name : str):
+    def __init__(self, dataset_name : str, force_download : bool = False):
         """Constructor for DataLoaderBase
 
         Args:
             dataset_name (str): Name of the dataset to load.
+            force_download (bool, optional): Whether to force download the dataset. Defaults to False.
         """
         self.dataset_name = dataset_name
         self.download_urls = self._fetch_download_urls(dataset_name)
         self.data_dir = os.path.join(tempfile.gettempdir(), 'hamu_tool', 'dataset', self.dataset_name)
         if os.path.exists(self.data_dir):
-            return
+            if not force_download:
+                return
+            shutil.rmtree(self.data_dir)
         os.makedirs(self.data_dir)
         print(f'Downloading dataset [{self.dataset_name}] ...')
         for url in self.download_urls:
@@ -73,13 +77,13 @@ class DataLoaderBase:
 class DataLoaderQDRBase(DataLoaderBase):
     """Base class for DataLoaderQDR
     """
-    def __init__(self, dataset_name : str):
+    def __init__(self, dataset_name : str, *args, **kwargs):
         """Constructor for DataLoaderQDRBase
 
         Args:
             dataset_name (str): Name of the dataset to load.
         """
-        super().__init__(dataset_name)
+        super().__init__(dataset_name, *args, **kwargs)
         self.reader_doc = CorpusReader(f'{self.data_dir}/doc.idx')
         self.reader_query = CorpusReader(f'{self.data_dir}/query.idx')
         self.qrel = {}

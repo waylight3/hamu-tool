@@ -34,7 +34,7 @@ class DataLoader:
             raise Exception('Failed to fetch dataset list')
 
     @staticmethod
-    def load(dataset_name : str) -> object:
+    def load(dataset_name : str, *args, **kwargs) -> object:
         """Load the dataset with the given name.
 
         Args:
@@ -51,6 +51,6 @@ class DataLoader:
 
         if dataset_name in wrapper_mapping:
             wrapper_class = globals()[wrapper_mapping[dataset_name]]
-            return wrapper_class()
+            return wrapper_class(*args, **kwargs)
         else:
             raise Exception(f'Dataset [{dataset_name}] not found')

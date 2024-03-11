@@ -1,8 +1,8 @@
 from .data_loader_base import DataLoaderQDRBase
 
 class SciFactDataLoader(DataLoaderQDRBase):
-    def __init__(self):
-        super().__init__('beir/scifact')
+    def __init__(self, *args, **kwargs):
+        super().__init__('beir/scifact', *args, **kwargs)
 
     def __str__(self) -> str:
         return 'SciFactDataLoader()'
