@@ -25,8 +25,6 @@ class CorpusReader:
         with open(f'{self.index_path}', 'r', encoding='utf-8') as fp:
             for line in fp:
                 self.data_offset += len(line)
-                # if not line.endswith('\r\n'):
-                #     self.data_offset += 1
                 idx, start_idx, end_idx = line.strip().split('\t')
                 if (idx, start_idx, end_idx) == ('0', '0', '0'):
                     break
@@ -149,7 +147,9 @@ class CorpusReader:
             verbose (bool, optional): Wheather to print the progress status or not. Defaults to False.
         """
         # Create index and data files
-        with open(f'{index_path}', 'w', encoding='utf-8') as fp_idx, open(f'{index_path}.data', 'w', encoding='utf-8') as fp_data, open(data_path, 'r', encoding='utf-8') as fp:
+        with open(f'{index_path}', 'w', encoding='utf-8', newline='\n') as fp_idx, \
+            open(f'{index_path}.data', 'w', encoding='utf-8', newline='\n') as fp_data, \
+            open(data_path, 'r', encoding='utf-8') as fp:
             file_name = data_path.split('/')[-1]
             cnt = 0
             cnt_doc = 0
@@ -162,7 +162,7 @@ class CorpusReader:
                 fp_idx.write(f'{idx}\t{cnt}\t{cnt + len(content)}\n')
                 cnt += len(content)
                 cnt_doc += 1
-                if verbose and cnt_doc % 100 == 0:
+                if verbose and cnt_doc % 1000 == 0:
                     now = datetime.datetime.now().strftime('%H:%M:%S')
                     print(f'[ {now} ] Corpus Reader | file: {file_name} | reading documents | doc: {cnt_doc:,} |', end='\r', flush=True)
             if verbose:
@@ -174,7 +174,7 @@ class CorpusReader:
         with open(f'{index_path}', 'a', encoding='utf-8') as fp_idx, open(f'{index_path}.data', 'r', encoding='utf-8') as fp_data:
             for line in fp_data:
                 fp_idx.write(line)
-                if verbose and cnt_doc % 100 == 0:
+                if verbose and cnt_doc % 1000 == 0:
                     now = datetime.datetime.now().strftime('%H:%M:%S')
                     print(f'[ {now} ] Corpus Reader | file: {file_name} | merging index |', end='\r', flush=True)
             if verbose:

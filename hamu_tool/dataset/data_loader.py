@@ -1,6 +1,7 @@
 from .arguana_data_loader import ArguanaDataLoader
 from .fiqa_data_loader import FiQADataLoader
 from .nfcorpus_data_loader import NFCorpusDataLoader
+from .quora_data_loader import QuoraDataLoader
 from .robust04_data_loader import Robust04DataLoader
 from .scidocs_data_loader import SciDocsDataLoader
 from .scifact_data_loader import SciFactDataLoader
