@@ -1,3 +1,13 @@
+"""This module contains a class BIBExtractor that is used to extract and parse BIB entries from a .bib file. 
+The BIBExtractor class has the following methods:
+- __init__(self, path: str): Initializes the BIBExtractor instance and imports entries from the .bib file specified by the path.
+- import_from_bib(self, path: str): Imports BIB entries from a .bib file.
+- _parse_entry_from_raw(self, raw: str) -> dict[str, str]: Parses a raw entry string into a dictionary.
+- _parse_entry_from_raw_line(self, raw: str) -> list[str]: Parses lines from a raw entry string, considering nested braces and quotes.
+- _clean_entry(self, entry: dict[str, str]) -> dict[str, str]: Cleans and formats an entry values, including converting LaTeX to Unicode.
+The BIBExtractor class also has a class variable 'latex_unicode_mapping' which is a dictionary mapping of LaTeX special characters to their Unicode counterparts.
+"""
+
 class BIBExtractor:
     """Class to extract and parse BIB entries from a .bib file.
     """
