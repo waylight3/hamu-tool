@@ -1,7 +1,6 @@
 """This module defines a CorpusReader class for efficient access to documents in a corpus using an index.
 The CorpusReader uses memory-mapped file support for random access to large files or streams.
 This module is compatible with Python 3.8 and above due to the use of the '|' (pipe) operator for type hinting.
-
 The CorpusReader class provides methods to:
 - Initialize the corpus reader using a pre-built index file.
 - Fetch a document by its ID or index in dict format or raw string format.
@@ -66,7 +65,9 @@ class CorpusReader:
         idx = self.idx_list[index] if isinstance(index, int) else index
         if not self.__contain__(idx):
             raise KeyError(f'Index or ID not found: [{idx}]')
-        doc = self.mm[self.data_offset+self.index[idx]['start']:self.data_offset+self.index[idx]['end']]
+        start_idx = self.data_offset+self.index[idx]['start']
+        end_idx = self.data_offset+self.index[idx]['end']
+        doc = self.mm[start_idx:end_idx]
         doc = doc.decode()
         doc = json.loads(doc)
         return doc
@@ -83,7 +84,9 @@ class CorpusReader:
         idx = self.idx_list[index] if isinstance(index, int) else index
         if not self.__contain__(idx):
             raise KeyError(f'Index or ID not found: [{idx}]')
-        doc = self.mm[self.data_offset+self.index[idx]['start']:self.data_offset+self.index[idx]['end']]
+        start_idx = self.data_offset+self.index[idx]['start']
+        end_idx = self.data_offset+self.index[idx]['end']
+        doc = self.mm[start_idx:end_idx]
         doc = doc.decode()
         return doc
 
