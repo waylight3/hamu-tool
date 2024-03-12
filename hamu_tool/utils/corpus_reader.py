@@ -1,3 +1,18 @@
+"""This module defines a CorpusReader class for efficient access to documents in a corpus using an index.
+The CorpusReader uses memory-mapped file support for random access to large files or streams.
+This module is compatible with Python 3.8 and above due to the use of the '|' (pipe) operator for type hinting.
+
+The CorpusReader class provides methods to:
+- Initialize the corpus reader using a pre-built index file.
+- Fetch a document by its ID or index in dict format or raw string format.
+- Return the number of documents in the corpus.
+- Check if a given index or ID is in the corpus.
+- Return a string representation of the corpus reader.
+- Return an iterator for the corpus reader.
+- Convert given data into string representation.
+- Build an index file for a given data file.
+"""
+
 import datetime
 import json
 import mmap
@@ -5,12 +20,11 @@ import os
 import unidecode
 
 class CorpusReader:
-    """
-        A reader for efficiently accessing documents in a corpus using an index.
+    """A reader for efficiently accessing documents in a corpus using an index.
     """
     def __init__(self, index_path : str):
-        """
-            Initialize the corpus reader using an pre-built index file.
+        """Initialize the corpus reader using an pre-built index file.
+
         Args:
             index_path (str): Path of the pre-built index file.
         """
@@ -35,17 +49,17 @@ class CorpusReader:
         self.mm = mmap.mmap(self.fp.fileno(), 0)
 
     def __del__(self):
-        """
-            Clean up resources.
+        """Clean up resources.
         """
         self.mm.close()
         self.fp.close()
 
     def __getitem__(self, index : int | str) -> dict:
-        """
-            Fetch a document by its ID (str) or index (int) in dict format.
+        """Fetch a document by its ID (str) or index (int) in dict format.
+
         Args:
             index (int | str): The ID (str) or index (int) of the document.
+
         Returns:
             dict: The fetched document in dict format.
         """
@@ -58,10 +72,11 @@ class CorpusReader:
         return doc
 
     def raw(self, index : int | str) -> str:
-        """
-            Fetch a document by its ID (str) or index (int) in raw string format.
+        """Fetch a document by its ID (str) or index (int) in raw string format.
+
         Args:
             index (int | str): The ID (str) or index (int) of the document.
+
         Returns:
             str: The fetched document in raw string format.
         """
@@ -73,26 +88,27 @@ class CorpusReader:
         return doc
 
     def __len__(self) -> int:
-        """
-            Return the number of documents in the corpus.
+        """Return the number of documents in the corpus.
+
         Returns:
             int: Number of documents in the corpus.
         """
         return len(self.idx_list)
 
     def __contain__(self, index : int | str) -> bool:
-        """
-            Check if the given index (int) or ID (str) is in the corpus.
+        """Check if the given index (int) or ID (str) is in the corpus.
+
         Args:
             index (int | str): The ID (str) or index (int) of the document.
+
         Returns:
             bool: Whether the given index or ID is in the corpus or not.
         """
         return index in self.idx_set
 
     def __str__(self):
-        """
-            Return the string representation of the corpus reader.
+        """Return the string representation of the corpus reader.
+
         Returns:
             str: String representation of the corpus reader.
         """
@@ -106,16 +122,16 @@ class CorpusReader:
         return f"CorpusReader(index_path='{self.index_path}')\n- number of documents: {len(self)}\n- index file size: {index_file_size:.1f} {unit}"
 
     def __repr__(self):
-        """
-            Return the string representation of the corpus reader.
+        """Return the string representation of the corpus reader.
+
         Returns:
             str: String representation of the corpus reader.
         """
         return f"CorpusReader('{self.index_path}')"
 
     def __iter__(self):
-        """
-            Return an iterator for the corpus reader.
+        """Return an iterator for the corpus reader.
+
         Returns:
             iter: An iterator for the corpus reader.
         """
@@ -124,10 +140,11 @@ class CorpusReader:
 
     @staticmethod
     def to_str(data : any) -> str:
-        """
-            Convert the given data into string representation.
+        """Convert the given data into string representation.
+
         Args:
             data (any): Data to convert.
+
         Returns:
             str: String converted version of the given data.
         """
@@ -138,8 +155,8 @@ class CorpusReader:
 
     @staticmethod
     def build_index(data_path : str, index_path : str, idx_field : str = 'id', verbose : bool = False):
-        """
-            Build an index file for the given data file.
+        """Build an index file for the given data file.
+
         Args:
             data_path (str): Path of the data file (jsonl type).
             index_path (str): Path of the index file to be created.
