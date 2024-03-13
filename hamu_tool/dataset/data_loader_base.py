@@ -101,6 +101,14 @@ class DataLoaderQDRBase(DataLoaderBase):
                     self.qrel[mode][qid].append((did, int(score)))
                     self.qrel_list[mode].append((qid, did, int(score)))
 
+    def total_docs(self) -> int:
+        """Total number of documents in the dataset.
+
+        Returns:
+            int: Total number of documents in the dataset.
+        """
+        return len(self.reader_doc)
+
     def get_doc(self, did : str | int) -> str:
         """Fetch a document by its ID.
 
@@ -120,6 +128,14 @@ class DataLoaderQDRBase(DataLoaderBase):
         """
         for it in self.reader_doc:
             yield it
+
+    def total_queries(self) -> int:
+        """Total number of queries in the dataset.
+
+        Returns:
+            int: Total number of queries in the dataset.
+        """
+        return len(self.reader_query)
 
     def get_query(self, qid : str | int) -> str:
         """Fetch a query by its ID.
