@@ -109,6 +109,17 @@ class DataLoaderQDRBase(DataLoaderBase):
         """
         return len(self.reader_doc)
 
+    def get_did(self, idx : int) -> str:
+        """Fetch the document ID by its index.
+
+        Args:
+            idx (int): The index of the document.
+
+        Returns:
+            str: The fetched document ID.
+        """
+        return self.reader_doc.idx_list[idx]
+
     def get_doc(self, did : str | int) -> str:
         """Fetch a document by its ID.
 
@@ -136,6 +147,17 @@ class DataLoaderQDRBase(DataLoaderBase):
             int: Total number of queries in the dataset.
         """
         return len(self.reader_query)
+
+    def get_qid(self, idx : int) -> str:
+        """Fetch the query ID by its index.
+
+        Args:
+            idx (int): The index of the query.
+
+        Returns:
+            str: The fetched query ID.
+        """
+        return self.reader_query.idx_list[idx]
 
     def get_query(self, qid : str | int) -> str:
         """Fetch a query by its ID.
