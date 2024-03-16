@@ -1,4 +1,24 @@
+"""This module provides two functions, _pprint and pprint, for pretty-printing Python objects. 
+The _pprint function takes an object and an optional maximum depth, and returns a list of strings that represent a pretty-printed version of the object. It handles lists, dictionaries, and other types of objects differently, creating a tabular representation for lists and dictionaries.
+The pprint function uses _pprint to generate a pretty-printed representation of an object, and then prints this representation. Like _pprint, it takes an object and an optional maximum depth as arguments.
+Functions:
+    _pprint(obj : any, max_deep : int = -1) -> list:
+        Returns a pretty representation of the object.
+    pprint(obj : any, max_deep : int = -1) -> None:
+        Prints a pretty representation of the object.
+"""
+
 def _pprint(obj : any, max_deep : int = -1) -> list:
+    """Returns a pretty representation of the object.
+
+    Args:
+        obj (any): The object to be printed.
+        max_deep (int, optional): The maximum depth of the object to be printed. Defaults to -1 (infinite depth).
+
+    Returns:
+        list: A list of strings representing the pretty representation of the object.
+    """
+
     if max_deep == 0:
         return ['...']
     elif type(obj) == list:
@@ -83,8 +103,14 @@ def _pprint(obj : any, max_deep : int = -1) -> list:
     else:
         return [str(obj)]
 
-
 def pprint(obj : any, max_deep : int = -1) -> None:
+    """Prints a pretty representation of the object.
+
+    Args:
+        obj (any): The object to be printed.
+        max_deep (int, optional): The maximum depth of the object to be printed. Defaults to -1 (infinite depth).
+    """
+
     table = _pprint(obj, max_deep)
     text = '\n'.join(table)
     print(text)
