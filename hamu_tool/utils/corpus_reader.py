@@ -174,10 +174,15 @@ class CorpusReader:
             cnt = 0
             cnt_doc = 0
             for line in fp:
-                data = json.loads(line)
+                data_pre = json.loads(line)
+                data = {}
+                for key_pre in data_pre:
+                    key = unidecode.unidecode(key_pre)
+                    value = unidecode.unidecode(data_pre[key_pre])
+                    data[key] = value
+                idx_field = unidecode.unidecode(idx_field)
                 idx = data[idx_field]
                 content = json.dumps(data, ensure_ascii=False, separators=(',', ':'))
-                content = unidecode.unidecode(content)
                 fp_data.write(content)
                 fp_idx.write(f'{idx}\t{cnt}\t{cnt + len(content)}\n')
                 cnt += len(content)
