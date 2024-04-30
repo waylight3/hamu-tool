@@ -46,7 +46,7 @@ class TrecCovidDataLoader(DataLoaderQDRBase):
             instance = TrecCovidDocInstance(id=doc['id'], text=doc['text'], title=doc['title'], url=doc['url'], pubmed_id=doc['pubmed_id'])
             yield instance
 
-    def get_qrel(self, qid : str, mode : str) -> list[TrecCovidQrelInstance]:
+    def get_qrel(self, mode : str, qid : str) -> list[TrecCovidQrelInstance]:
         if qid not in self.qrel[mode]:
             raise KeyError(f'Qrel for query [{qid}] not found')
         instances = []

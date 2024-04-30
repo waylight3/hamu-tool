@@ -42,7 +42,7 @@ class QuoraDataLoader(DataLoaderQDRBase):
             instance = QuoraDocInstance(id=doc['id'], text=doc['text'])
             yield instance
 
-    def get_qrel(self, qid : str, mode : str) -> list[QuoraQrelInstance]:
+    def get_qrel(self, mode : str, qid : str) -> list[QuoraQrelInstance]:
         if qid not in self.qrel[mode]:
             raise KeyError(f'Qrel for query [{qid}] not found')
         instances = []

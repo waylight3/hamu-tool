@@ -47,7 +47,7 @@ class Touchev2DataLoader(DataLoaderQDRBase):
             instance = Touchev2DocInstance(id=doc['id'], text=doc['text'], title=doc['title'], stance=doc['stance'], url=doc['url'])
             yield instance
 
-    def get_qrel(self, qid : str, mode : str) -> list[Touchev2QrelInstance]:
+    def get_qrel(self, mode : str, qid : str) -> list[Touchev2QrelInstance]:
         if qid not in self.qrel[mode]:
             raise KeyError(f'Qrel for query [{qid}] not found')
         instances = []

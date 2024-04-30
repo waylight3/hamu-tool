@@ -42,7 +42,7 @@ class FiQADataLoader(DataLoaderQDRBase):
             instance = FiQADocInstance(id=doc['id'], text=doc['text'])
             yield instance
 
-    def get_qrel(self, qid : str, mode : str) -> list[FiQAQrelInstance]:
+    def get_qrel(self, mode : str, qid : str) -> list[FiQAQrelInstance]:
         if qid not in self.qrel[mode]:
             raise KeyError(f'Qrel for query [{qid}] not found')
         instances = []

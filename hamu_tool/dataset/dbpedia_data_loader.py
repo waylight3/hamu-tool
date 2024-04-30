@@ -44,7 +44,7 @@ class DBPediaDataLoader(DataLoaderQDRBase):
             instance = DBPediaDocInstance(id=doc['id'], text=doc['text'], title=doc['title'], url=doc['url'])
             yield instance
 
-    def get_qrel(self, qid : str, mode : str) -> list[DBPediaQrelInstance]:
+    def get_qrel(self, mode : str, qid : str) -> list[DBPediaQrelInstance]:
         if qid not in self.qrel[mode]:
             raise KeyError(f'Qrel for query [{qid}] not found')
         instances = []

@@ -48,7 +48,7 @@ class TrecNewsDataLoader(DataLoaderQDRBase):
             instance = TrecNewsDocInstance(id=doc['id'], text=doc['text'], title=doc['title'], url=doc['url'], author=doc['author'], type=doc['type'], source=doc['source'], published_date=doc['published_date'])
             yield instance
 
-    def get_qrel(self, qid : str, mode : str) -> list[TrecNewsQrelInstance]:
+    def get_qrel(self, mode : str, qid : str) -> list[TrecNewsQrelInstance]:
         if qid not in self.qrel[mode]:
             raise KeyError(f'Qrel for query [{qid}] not found')
         instances = []

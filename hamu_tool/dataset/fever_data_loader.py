@@ -43,7 +43,7 @@ class FEVERDataLoader(DataLoaderQDRBase):
             instance = FEVERDocInstance(id=doc['id'], text=doc['text'], title=doc['title'])
             yield instance
 
-    def get_qrel(self, qid : str, mode : str) -> list[FEVERQrelInstance]:
+    def get_qrel(self, mode : str, qid : str) -> list[FEVERQrelInstance]:
         if qid not in self.qrel[mode]:
             raise KeyError(f'Qrel for query [{qid}] not found')
         instances = []

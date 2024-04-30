@@ -47,7 +47,7 @@ class ToucheDataLoader(DataLoaderQDRBase):
             instance = ToucheDocInstance(id=doc['id'], text=doc['text'], title=doc['title'], stance=doc['stance'], url=doc['url'])
             yield instance
 
-    def get_qrel(self, qid : str, mode : str) -> list[ToucheQrelInstance]:
+    def get_qrel(self, mode : str, qid : str) -> list[ToucheQrelInstance]:
         if qid not in self.qrel[mode]:
             raise KeyError(f'Qrel for query [{qid}] not found')
         instances = []

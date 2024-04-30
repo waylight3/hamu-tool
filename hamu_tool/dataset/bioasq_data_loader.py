@@ -47,7 +47,7 @@ class BioASQDataLoader(DataLoaderQDRBase):
             instance = BioASQDocInstance(id=doc['id'], text=doc['text'], title=doc['title'], journal=doc['journal'], year=doc['year'], pmid=doc['pmid'], mesh_major=doc['mesh_major'])
             yield instance
 
-    def get_qrel(self, qid : str, mode : str) -> list[BioASQQrelInstance]:
+    def get_qrel(self, mode : str, qid : str) -> list[BioASQQrelInstance]:
         if qid not in self.qrel[mode]:
             raise KeyError(f'Qrel for query [{qid}] not found')
         instances = []

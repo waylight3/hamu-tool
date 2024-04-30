@@ -44,7 +44,7 @@ class HotpotQADataLoader(DataLoaderQDRBase):
             instance = HotpotQADocInstance(id=doc['id'], text=doc['text'], title=doc['title'], url=doc['url'])
             yield instance
 
-    def get_qrel(self, qid : str, mode : str) -> list[HotpotQAQrelInstance]:
+    def get_qrel(self, mode : str, qid : str) -> list[HotpotQAQrelInstance]:
         if qid not in self.qrel[mode]:
             raise KeyError(f'Qrel for query [{qid}] not found')
         instances = []

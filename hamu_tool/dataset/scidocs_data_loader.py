@@ -51,7 +51,7 @@ class SciDocsDataLoader(DataLoaderQDRBase):
             instance = SciDocsDocInstance(id=doc['id'], text=doc['text'], title=doc['title'], year=doc['year'], authors=doc['authors'], cited_by=doc['cited_by'], references=doc['references'])
             yield instance
 
-    def get_qrel(self, qid : str, mode : str) -> list[SciDocsQrelInstance]:
+    def get_qrel(self, mode : str, qid : str) -> list[SciDocsQrelInstance]:
         if qid not in self.qrel[mode]:
             raise KeyError(f'Qrel for query [{qid}] not found')
         instances = []

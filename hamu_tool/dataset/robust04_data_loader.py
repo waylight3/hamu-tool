@@ -42,7 +42,7 @@ class Robust04DataLoader(DataLoaderQDRBase):
             instance = Robust04DocInstance(id=doc['id'], text=doc['text'])
             yield instance
 
-    def get_qrel(self, qid : str, mode : str) -> list[Robust04QrelInstance]:
+    def get_qrel(self, mode : str, qid : str) -> list[Robust04QrelInstance]:
         if qid not in self.qrel[mode]:
             raise KeyError(f'Qrel for query [{qid}] not found')
         instances = []
