@@ -1,5 +1,5 @@
 from ..utils.corpus_reader import CorpusReader
-from typing import Iterator
+from tqdm import tqdm
 import glob
 import os
 import requests
@@ -61,16 +61,21 @@ class DataLoaderBase:
         Raises:
             Exception: If failed to download the dataset.
         """
-        res = requests.get(url)
+        res = requests.get(url, stream=True)
         if res.status_code == 200:
             filename = res.headers.get('content-disposition').split('filename=')
             if len(filename) > 1:
                 filename = filename[1]
             else:
                 filename = res.headers.get('content-disposition').split('filename*=')[-1].split("''")[-1]
+            total = int(res.headers.get('content-length', 0))
+            pbar = tqdm(total=total, desc=filename, unit='B', unit_scale=True, unit_divisor=1024)
             data_path = os.path.join(data_dir, filename)
             with open(data_path, 'wb') as fp:
-                fp.write(res.content)
+                for data in res.iter_content(chunk_size=1024):
+                    pbar.update(len(data))
+                    fp.write(data)
+                # fp.write(res.content)
         else:
             raise Exception('Failed to download dataset')
 
@@ -120,26 +125,6 @@ class DataLoaderQDRBase(DataLoaderBase):
         """
         return self.reader_doc.idx_list[idx]
 
-    def get_doc(self, did : str | int) -> str:
-        """Fetch a document by its ID.
-
-        Args:
-            did (str | int): The ID (str) or index (int) of the document.
-
-        Returns:
-            str: The fetched document.
-        """
-        return self.reader_doc[did]
-
-    def get_docs(self) -> Iterator[dict[str, str]]:
-        """Iterator for documents in the dataset.
-
-        Yields:
-            Iterator[dict[str, str]]: Iterator for documents in the dataset.
-        """
-        for it in self.reader_doc:
-            yield it
-
     def total_queries(self) -> int:
         """Total number of queries in the dataset.
 
@@ -159,55 +144,13 @@ class DataLoaderQDRBase(DataLoaderBase):
         """
         return self.reader_query.idx_list[idx]
 
-    def get_query(self, qid : str | int) -> str:
-        """Fetch a query by its ID.
+    def total_qrels(self, mode : str) -> int:
+        """Total number of qrels in the dataset.
 
         Args:
-            qid (str | int): The ID (str) or index (int) of the query.
+            mode (str): Mode of the dataset.
 
         Returns:
-            str: The fetched query.
+            int: Total number of qrels in the dataset.
         """
-        return self.reader_query[qid]
-
-    def get_queries(self) -> Iterator[dict[str, str]]:
-        """Iterator for queries in the dataset.
-
-        Yields:
-            Iterator[dict[str, str]]: Iterator for queries in the dataset.
-        """
-        for it in self.reader_query:
-            yield it
-
-    def get_qrel(self, qid : str, mode : str, with_score : bool = False) -> list[str] | list[tuple[str, int]]:
-        """Fetch the qrel for the given query ID.
-
-        Args:
-            qid (str): The ID of the query.
-            mode (str): The mode of the qrel such as 'train', 'dev', or 'test'. Check the document for each dataset.
-            with_score (bool, optional): Whether to include the score in the qrel. Defaults to False.
-
-        Raises:
-            Exception: If qrel for the given query ID is not found.
-
-        Returns:
-            list[str]: When with_score is False. List of relevant document IDs for the query.
-            list[tuple[str, int]]: When with_score is True. List of relevant document IDs and their scores for the query.
-        """
-        if qid not in self.qrel[mode]:
-            raise Exception(f'Qrel for query [{qid}] not found')
-        if with_score:
-            return self.qrel[mode][qid]
-        return [did for did, _ in self.qrel[mode][qid]]
-
-    def get_qrels(self, mode : str) -> Iterator[dict[str, any]]:
-        """Iterator for qrels in the dataset.
-
-        Args:
-            mode (str): The mode of the qrel such as 'train', 'dev', or 'test'. Check the document for each dataset.
-
-        Yields:
-            Iterator[dict[str, any]]: Iterator for qrels in the dataset.
-        """
-        for qid, did, score in self.qrel_list[mode]:
-            yield {'qid': qid, 'did': did, 'score': score}
+        return len(self.qrel_list[mode])

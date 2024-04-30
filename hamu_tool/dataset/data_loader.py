@@ -1,12 +1,22 @@
 from .arguana_data_loader import ArguanaDataLoader
+from .bioasq_data_loader import BioASQDataLoader
+from .climate_fever_data_loader import ClimateFEVERDataLoader
+from .dbpedia_data_loader import DBPediaDataLoader
+from .fever_data_loader import FEVERDataLoader
 from .fiqa_data_loader import FiQADataLoader
+from .hotpotqa_data_loader import HotpotQADataLoader
+from .msmarco_data_loader import MSMARCODataLoader
 from .nfcorpus_data_loader import NFCorpusDataLoader
+from .nq_data_loader import NQDataLoader
 from .quora_data_loader import QuoraDataLoader
 from .robust04_data_loader import Robust04DataLoader
 from .scidocs_data_loader import SciDocsDataLoader
 from .scifact_data_loader import SciFactDataLoader
+from .signal1m_data_loader import Signal1MDataLoader
 from .trec_covid_data_loader import TrecCovidDataLoader
-from .webis_touche_2020_data_loader import WebisTouche2020DataLoader
+from .trec_news_data_loader import TrecNewsDataLoader
+from .touche_data_loader import ToucheDataLoader
+from .touche_v2_data_loader import Touchev2DataLoader
 import requests
 
 class DataLoader:

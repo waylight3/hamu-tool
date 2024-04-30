@@ -16,7 +16,7 @@ import datetime
 import json
 import mmap
 import os
-import unidecode
+# import unidecode
 
 class CorpusReader:
     """A reader for efficiently accessing documents in a corpus using an index.
@@ -37,7 +37,7 @@ class CorpusReader:
         self.index_file_size = os.path.getsize(self.index_path)
         with open(f'{self.index_path}', 'r', encoding='utf-8') as fp:
             for line in fp:
-                self.data_offset += len(line)
+                self.data_offset += len(line.encode())
                 idx, start_idx, end_idx = line.strip().split('\t')
                 if (idx, start_idx, end_idx) == ('0', '0', '0'):
                     break
@@ -174,18 +174,21 @@ class CorpusReader:
             cnt = 0
             cnt_doc = 0
             for line in fp:
-                data_pre = json.loads(line)
-                data = {}
-                for key_pre in data_pre:
-                    key = unidecode.unidecode(key_pre)
-                    value = unidecode.unidecode(data_pre[key_pre])
-                    data[key] = value
-                idx_field = unidecode.unidecode(idx_field)
+                # data_pre = json.loads(line)
+                # data = {}
+                # for key_pre in data_pre:
+                #     key = unidecode.unidecode(key_pre)
+                #     value = unidecode.unidecode(data_pre[key_pre])
+                #     data[key] = value
+                # idx_field = unidecode.unidecode(idx_field)
+                data = json.loads(line) # new
                 idx = data[idx_field]
                 content = json.dumps(data, ensure_ascii=False, separators=(',', ':'))
                 fp_data.write(content)
-                fp_idx.write(f'{idx}\t{cnt}\t{cnt + len(content)}\n')
-                cnt += len(content)
+                # size = len(content)
+                size = len(content.encode()) # new
+                fp_idx.write(f'{idx}\t{cnt}\t{cnt + size}\n')
+                cnt += size
                 cnt_doc += 1
                 if verbose and cnt_doc % 1000 == 0:
                     now = datetime.datetime.now().strftime('%H:%M:%S')
