@@ -13,10 +13,10 @@ from .robust04_data_loader import Robust04DataLoader
 from .scidocs_data_loader import SciDocsDataLoader
 from .scifact_data_loader import SciFactDataLoader
 from .signal1m_data_loader import Signal1MDataLoader
-from .trec_covid_data_loader import TrecCovidDataLoader
-from .trec_news_data_loader import TrecNewsDataLoader
 from .touche_data_loader import ToucheDataLoader
 from .touche_v2_data_loader import Touchev2DataLoader
+from .trec_covid_data_loader import TrecCovidDataLoader
+from .trec_news_data_loader import TrecNewsDataLoader
 import requests
 
 class DataLoader:
@@ -44,7 +44,7 @@ class DataLoader:
             raise Exception('Failed to fetch dataset list')
 
     @staticmethod
-    def load(dataset_name : str, *args, **kwargs) -> object:
+    def load(dataset_name : str, *args, **kwargs) -> ArguanaDataLoader | BioASQDataLoader | ClimateFEVERDataLoader | DBPediaDataLoader | FEVERDataLoader | FiQADataLoader | HotpotQADataLoader | MSMARCODataLoader | NFCorpusDataLoader | NQDataLoader | QuoraDataLoader | Robust04DataLoader | SciDocsDataLoader | SciFactDataLoader | Signal1MDataLoader | ToucheDataLoader | Touchev2DataLoader | TrecCovidDataLoader | TrecNewsDataLoader:
         """Load the dataset with the given name.
 
         Args:
@@ -54,7 +54,7 @@ class DataLoader:
             Exception: If the dataset is not found.
 
         Returns:
-            object: The dataset wrapper object.
+            @@DataLoader: The dataset wrapper object.
         """
         dataset_list = DataLoader.dataset_list()
         wrapper_mapping = { dataset['name']: dataset['wrapper'] for dataset in dataset_list }

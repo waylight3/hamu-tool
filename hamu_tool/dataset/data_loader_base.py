@@ -93,11 +93,19 @@ class DataLoaderQDRBase(DataLoaderBase):
         self.reader_query = CorpusReader(f'{self.data_dir}/query.idx')
         self.qrel = {}
         self.qrel_list = {}
+        self.drel = {}
+        self.qid_list = {}
+        self.did_list = {}
         qrel_paths = glob.glob(f'{self.data_dir}/qrel.*.tsv')
         for qrel_path in qrel_paths:
             mode = qrel_path.split('.')[-2]
             self.qrel[mode] = {}
             self.qrel_list[mode] = []
+            self.drel[mode] = {}
+            self.qid_list[mode] = []
+            self.qid_set = set()
+            self.did_list[mode] = []
+            self.did_set = set()
             with open(qrel_path, 'r', encoding='utf-8') as fp:
                 for line in fp:
                     qid, _, did, score = line.strip().split()
@@ -105,35 +113,63 @@ class DataLoaderQDRBase(DataLoaderBase):
                         self.qrel[mode][qid] = []
                     self.qrel[mode][qid].append((did, int(score)))
                     self.qrel_list[mode].append((qid, did, int(score)))
+                    if did not in self.drel[mode]:
+                        self.drel[mode][did] = []
+                    self.drel[mode][did].append((qid, int(score)))
+                    if qid not in self.qid_set:
+                        self.qid_set.add(qid)
+                        self.qid_list[mode].append(qid)
+                    if did not in self.did_set:
+                        self.did_set.add(did)
+                        self.did_list[mode].append(did)
 
-    def total_docs(self) -> int:
+    def total_docs(self, mode : str = None) -> int:
         """Total number of documents in the dataset.
+
+        Args:
+            mode (str, optional): Mode of the dataset. Defaults to None.
 
         Returns:
             int: Total number of documents in the dataset.
         """
-        return len(self.reader_doc)
+        if not mode:
+            size = len(self.reader_doc)
+        else:
+            size = len(self.did_list[mode])
+        return size
 
-    def get_did(self, idx : int) -> str:
+    def get_did(self, idx : int, mode : str = None) -> str:
         """Fetch the document ID by its index.
 
         Args:
             idx (int): The index of the document.
+            mode (str, optional): Mode of the dataset. Defaults to None.
 
         Returns:
             str: The fetched document ID.
         """
-        return self.reader_doc.idx_list[idx]
+        if not mode:
+            did = self.reader_doc.idx_list[idx]
+        else:
+            did = self.did_list[mode][idx]
+        return did
 
-    def total_queries(self) -> int:
+    def total_queries(self, mode : str = None) -> int:
         """Total number of queries in the dataset.
+
+        Args:
+            mode (str, optional): Mode of the dataset. Defaults to None.
 
         Returns:
             int: Total number of queries in the dataset.
         """
-        return len(self.reader_query)
+        if not mode:
+            size = len(self.reader_query)
+        else:
+            size = len(self.qid_list[mode])
+        return size
 
-    def get_qid(self, idx : int) -> str:
+    def get_qid(self, idx : int, mode : str = None) -> str:
         """Fetch the query ID by its index.
 
         Args:
@@ -142,7 +178,11 @@ class DataLoaderQDRBase(DataLoaderBase):
         Returns:
             str: The fetched query ID.
         """
-        return self.reader_query.idx_list[idx]
+        if not mode:
+            qid = self.reader_query.idx_list[idx]
+        else:
+            qid = self.qid_list[mode][idx]
+        return qid
 
     def total_qrels(self, mode : str) -> int:
         """Total number of qrels in the dataset.

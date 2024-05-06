@@ -28,25 +28,41 @@ class TrecNewsDataLoader(DataLoaderQDRBase):
     def __init__(self, *args, **kwargs):
         super().__init__('beir/trec-news', *args, **kwargs)
 
-    def get_query(self, qid : str | int) -> TrecNewsQueryInstance:
+    def get_query(self, qid : str | int, mode : str = None) -> TrecNewsQueryInstance:
+        if isinstance(qid, int):
+            qid = self.get_qid(qid, mode)
         query = self.reader_query[qid]
         instance = TrecNewsQueryInstance(id=query['id'], text=query['text'])
         return instance
 
-    def get_queries(self) -> Iterator[TrecNewsQueryInstance]:
-        for query in self.reader_query:
-            instance = TrecNewsQueryInstance(id=query['id'], text=query['text'])
-            yield instance
+    def get_queries(self, mode : str = None) -> Iterator[TrecNewsQueryInstance]:
+        if not mode:
+            for query in self.reader_query:
+                instance = TrecNewsQueryInstance(id=query['id'], text=query['text'])
+                yield instance
+        else:
+            for qid in self.qid_list[mode]:
+                query = self.reader_query[qid]
+                instance = TrecNewsQueryInstance(id=query['id'], text=query['text'])
+                yield instance
 
-    def get_doc(self, did : str | int) -> TrecNewsDocInstance:
+    def get_doc(self, did : str | int, mode : str = None) -> TrecNewsDocInstance:
+        if isinstance(did, int):
+            did = self.get_did(did, mode)
         doc = self.reader_doc[did]
         instance = TrecNewsDocInstance(id=doc['id'], text=doc['text'], title=doc['title'], url=doc['url'], author=doc['author'], type=doc['type'], source=doc['source'], published_date=doc['published_date'])
         return instance
 
-    def get_docs(self) -> Iterator[TrecNewsDocInstance]:
-        for doc in self.reader_doc:
-            instance = TrecNewsDocInstance(id=doc['id'], text=doc['text'], title=doc['title'], url=doc['url'], author=doc['author'], type=doc['type'], source=doc['source'], published_date=doc['published_date'])
-            yield instance
+    def get_docs(self, mode : str = None) -> Iterator[TrecNewsDocInstance]:
+        if not mode:
+            for doc in self.reader_doc:
+                instance = TrecNewsDocInstance(id=doc['id'], text=doc['text'], title=doc['title'], url=doc['url'], author=doc['author'], type=doc['type'], source=doc['source'], published_date=doc['published_date'])
+                yield instance
+        else:
+            for did in self.did_list[mode]:
+                doc = self.reader_doc[did]
+                instance = TrecNewsDocInstance(id=doc['id'], text=doc['text'], title=doc['title'], url=doc['url'], author=doc['author'], type=doc['type'], source=doc['source'], published_date=doc['published_date'])
+                yield instance
 
     def get_qrel(self, mode : str, qid : str) -> list[TrecNewsQrelInstance]:
         if qid not in self.qrel[mode]:
@@ -60,6 +76,17 @@ class TrecNewsDataLoader(DataLoaderQDRBase):
         for qid, did, score in self.qrel_list[mode]:
             instance = TrecNewsQrelInstance(qid=qid, did=did, score=score)
             yield instance
+
+    def get_drel(self, mode : str, did : str) -> list[TrecNewsQrelInstance]:
+        if did not in self.drel[mode]:
+            raise KeyError(f'Drel for document [{did}] not found')
+        instances = []
+        for qid, score in self.drel[mode][did]:
+            instances.append(TrecNewsQrelInstance(qid=qid, did=did, score=score))
+        return instances
+
+    def get_drels(self, mode : str) -> Iterator[TrecNewsQrelInstance]:
+        return self.get_qrels(mode)
 
     def __str__(self) -> str:
         return 'TrecNewsDataLoader()'
