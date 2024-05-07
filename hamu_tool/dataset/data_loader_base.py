@@ -1,4 +1,5 @@
 from ..utils.corpus_reader import CorpusReader
+from dataclasses import asdict
 from tqdm import tqdm
 import glob
 import os
@@ -194,3 +195,96 @@ class DataLoaderQDRBase(DataLoaderBase):
             int: Total number of qrels in the dataset.
         """
         return len(self.qrel_list[mode])
+
+    def make_query_instance(self, **kwargs):
+        """Make a query instance.
+
+        Args:
+            **kwargs: Keyword arguments for the query instance.
+
+        Returns:
+            QueryInstance: The query instance dataclass.
+        """
+        raise NotImplementedError
+
+    def make_doc_instance(self, **kwargs):
+        """Make a document instance.
+
+        Args:
+            **kwargs: Keyword arguments for the document instance.
+
+        Returns:
+            DocInstance: The document instance dataclass.
+        """
+        raise NotImplementedError
+
+    def make_qrel_instance(self, **kwargs):
+        """Make a qrel instance.
+
+        Args:
+            **kwargs: Keyword arguments for the qrel instance.
+
+        Returns:
+            QrelInstance: The qrel instance dataclass.
+        """
+        raise NotImplementedError
+
+    def get_query(self, qid : str | int, mode : str = None):
+        if isinstance(qid, int):
+            qid = self.get_qid(qid, mode)
+        query = self.reader_query[qid]
+        instance = self.make_query_instance(**asdict(query))
+        return instance
+
+    def get_queries(self, mode : str = None):
+        if not mode:
+            for query in self.reader_query:
+                instance = self.make_query_instance(**asdict(query))
+                yield instance
+        else:
+            for qid in self.qid_list[mode]:
+                query = self.reader_query[qid]
+                instance = self.make_query_instance(**asdict(query))
+                yield instance
+
+    def get_doc(self, did : str | int, mode : str = None):
+        if isinstance(did, int):
+            did = self.get_did(did, mode)
+        doc = self.reader_doc[did]
+        instance = self.make_doc_instance(**asdict(doc))
+        return instance
+
+    def get_docs(self, mode : str = None):
+        if not mode:
+            for doc in self.reader_doc:
+                instance = self.make_doc_instance(**asdict(doc))
+                yield instance
+        else:
+            for did in self.did_list[mode]:
+                doc = self.reader_doc[did]
+                instance = self.make_doc_instance(**asdict(doc))
+                yield instance
+
+    def get_qrel(self, mode : str, qid : str):
+        if qid not in self.qrel[mode]:
+            raise KeyError(f'Qrel for query [{qid}] not found')
+        instances = []
+        for did, score in self.qrel[mode][qid]:
+            instances.append(self.make_qrel_instance(qid=qid, did=did, score=score))
+        return instances
+
+    def get_qrels(self, mode : str):
+        for qid, did, score in self.qrel_list[mode]:
+            instance = self.make_qrel_instance(qid=qid, did=did, score=score)
+            yield instance
+
+    def get_drel(self, mode : str, did : str):
+        if did not in self.drel[mode]:
+            raise KeyError(f'Drel for document [{did}] not found')
+        instances = []
+        for qid, score in self.drel[mode][did]:
+            instances.append(self.make_qrel_instance(qid=qid, did=did, score=score))
+        return instances
+
+    def get_drels(self, mode : str):
+        return self.get_qrels(mode)
