@@ -17,7 +17,6 @@ import datetime
 import json
 import mmap
 import os
-# import unidecode
 
 class CorpusReader:
     """A reader for efficiently accessing documents in a corpus using an index.
@@ -179,19 +178,11 @@ class CorpusReader:
             cnt = 0
             cnt_doc = 0
             for line in fp:
-                # data_pre = json.loads(line)
-                # data = {}
-                # for key_pre in data_pre:
-                #     key = unidecode.unidecode(key_pre)
-                #     value = unidecode.unidecode(data_pre[key_pre])
-                #     data[key] = value
-                # idx_field = unidecode.unidecode(idx_field)
-                data = json.loads(line) # new
+                data = json.loads(line)
                 idx = data[idx_field]
                 content = json.dumps(data, ensure_ascii=False, separators=(',', ':'))
                 fp_data.write(content)
-                # size = len(content)
-                size = len(content.encode()) # new
+                size = len(content.encode())
                 fp_idx.write(f'{idx}\t{cnt}\t{cnt + size}\n')
                 cnt += size
                 cnt_doc += 1
