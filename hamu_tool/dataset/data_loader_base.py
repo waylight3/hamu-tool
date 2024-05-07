@@ -230,6 +230,15 @@ class DataLoaderQDRBase(DataLoaderBase):
         raise NotImplementedError
 
     def get_query(self, qid : str | int, mode : str = None):
+        """Fetch the query instance by its ID.
+
+        Args:
+            qid (str | int): The query ID or index.
+            mode (str, optional): Mode of the dataset. Defaults to None.
+
+        Returns:
+            QueryInstance: The fetched query instance.
+        """
         if isinstance(qid, int):
             qid = self.get_qid(qid, mode)
         query = self.reader_query[qid]
@@ -237,6 +246,14 @@ class DataLoaderQDRBase(DataLoaderBase):
         return instance
 
     def get_queries(self, mode : str = None):
+        """Fetch all query instances.
+
+        Args:
+            mode (str, optional): Mode of the dataset. Defaults to None.
+
+        Yields:
+            QueryInstance: The fetched query instance.
+        """
         if not mode:
             for query in self.reader_query:
                 instance = self.make_query_instance(**asdict(query))
@@ -248,6 +265,15 @@ class DataLoaderQDRBase(DataLoaderBase):
                 yield instance
 
     def get_doc(self, did : str | int, mode : str = None):
+        """Fetch the document instance by its ID.
+
+        Args:
+            did (str | int): The document ID or index.
+            mode (str, optional): Mode of the dataset. Defaults to None.
+
+        Returns:
+            DocInstance: The fetched document instance.
+        """
         if isinstance(did, int):
             did = self.get_did(did, mode)
         doc = self.reader_doc[did]
@@ -255,6 +281,14 @@ class DataLoaderQDRBase(DataLoaderBase):
         return instance
 
     def get_docs(self, mode : str = None):
+        """Fetch all document instances.
+
+        Args:
+            mode (str, optional): Mode of the dataset. Defaults to None.
+
+        Yields:
+            DocInstance: The fetched document instance.
+        """
         if not mode:
             for doc in self.reader_doc:
                 instance = self.make_doc_instance(**asdict(doc))
@@ -266,6 +300,18 @@ class DataLoaderQDRBase(DataLoaderBase):
                 yield instance
 
     def get_qrel(self, mode : str, qid : str):
+        """Fetch the qrel instances by query ID.
+
+        Args:
+            mode (str): Mode of the dataset.
+            qid (str): The query ID.
+
+        Raises:
+            KeyError: If qrel for the query ID not found.
+
+        Returns:
+            list[QrelInstance]: List of fetched qrel instances.
+        """
         if qid not in self.qrel[mode]:
             raise KeyError(f'Qrel for query [{qid}] not found')
         instances = []
@@ -274,11 +320,31 @@ class DataLoaderQDRBase(DataLoaderBase):
         return instances
 
     def get_qrels(self, mode : str):
+        """Fetch all qrel instances.
+
+        Args:
+            mode (str): Mode of the dataset.
+
+        Yields:
+            QrelInstance: The fetched qrel instance.
+        """
         for qid, did, score in self.qrel_list[mode]:
             instance = self.make_qrel_instance(qid=qid, did=did, score=score)
             yield instance
 
     def get_drel(self, mode : str, did : str):
+        """Fetch the drel instances by document ID.
+
+        Args:
+            mode (str): Mode of the dataset.
+            did (str): The document ID.
+
+        Raises:
+            KeyError: If drel for the document ID not found.
+
+        Returns:
+            list[QrelInstance]: List of fetched drel instances.
+        """
         if did not in self.drel[mode]:
             raise KeyError(f'Drel for document [{did}] not found')
         instances = []
@@ -287,4 +353,12 @@ class DataLoaderQDRBase(DataLoaderBase):
         return instances
 
     def get_drels(self, mode : str):
+        """Fetch all drel instances.
+
+        Args:
+            mode (str): Mode of the dataset.
+
+        Returns:
+            list[QrelInstance]: List of fetched drel instances.
+        """
         return self.get_qrels(mode)
