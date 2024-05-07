@@ -12,6 +12,7 @@ The CorpusReader class provides methods to:
 - Build an index file for a given data file.
 """
 
+from dataclasses import make_dataclass
 import datetime
 import json
 import mmap
@@ -46,6 +47,7 @@ class CorpusReader:
                 self.idx_set.add(idx)
         self.fp = open(f'{self.index_path}', 'r+b')
         self.mm = mmap.mmap(self.fp.fileno(), 0)
+        self.data_class = None
 
     def __del__(self):
         """Clean up resources.
@@ -70,7 +72,10 @@ class CorpusReader:
         doc = self.mm[start_idx:end_idx]
         doc = doc.decode()
         doc = json.loads(doc)
-        return doc
+        if not self.data_class:
+            self.data_class = make_dataclass('Document', [(key, type(value)) for key, value in doc.items()])
+        instance = self.data_class(**doc)
+        return instance
 
     def raw(self, index : int | str) -> str:
         """Fetch a document by its ID (str) or index (int) in raw string format.
