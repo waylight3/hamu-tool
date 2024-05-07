@@ -62,7 +62,7 @@ class CorpusReader:
             index (int | str): The ID (str) or index (int) of the document.
 
         Returns:
-            dict: The fetched document in dict format.
+            dataclass: The fetched document in dataclass format.
         """
         idx = self.idx_list[index] if isinstance(index, int) else index
         if not self.__contain__(idx):
