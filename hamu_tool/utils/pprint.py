@@ -8,24 +8,35 @@ Functions:
         Prints a pretty representation of the object.
 """
 
-def _pprint(obj : any, max_deep : int = -1) -> list:
+import os
+
+def _pprint(obj : any, max_deep : int = -1, max_width : int = -1) -> list:
     """Returns a pretty representation of the object.
 
     Args:
         obj (any): The object to be printed.
         max_deep (int, optional): The maximum depth of the object to be printed. Defaults to -1 (infinite depth).
+        max_width (int, optional): The maximum width of the object to be printed. Defaults to -1 (terminal width).
 
     Returns:
         list: A list of strings representing the pretty representation of the object.
     """
 
+    # print(obj, max_deep, max_width)
+
+    if max_width == -1:
+        max_width = os.get_terminal_size().columns
+
+    if max_width < 0:
+        return ['']
+
     if max_deep == 0:
         return ['...']
     elif type(obj) == list:
+        col0_width = len(f'{len(obj)}') + 2
         cells = []
         for item in obj:
-            cells.append(_pprint(item, min(max_deep - 1, -1)))
-        col0_width = len(f'{len(obj)}') + 2
+            cells.append(_pprint(item, min(max_deep - 1, -1), max_width - col0_width - 5))
         col1_width = 3
         for cell in cells:
             col1_width = max(col1_width, len(cell[0]) + 2)
@@ -64,8 +75,9 @@ def _pprint(obj : any, max_deep : int = -1) -> list:
         cells = []
         col0_width = 3
         for key in obj:
-            cells.append(_pprint(obj[key], min(max_deep - 1, -1)))
             col0_width = max(col0_width, len(f'{key}') + 2)
+        for key in obj:
+            cells.append(_pprint(obj[key], min(max_deep - 1, -1), max_width - col0_width - 5))
         col1_width = 3
         for cell in cells:
             col1_width = max(col1_width, len(cell[0]) + 2)
@@ -101,7 +113,9 @@ def _pprint(obj : any, max_deep : int = -1) -> list:
             result[base_y][1:col0_width] = f'{list(obj.keys())[i]:>{col0_width - 1}}'
         return [''.join(row) for row in result]
     else:
-        return [str(obj)]
+        text = str(obj)
+        num_lines = (len(text) + max_width - 1) // max_width
+        return [text[max_width * i: max_width * (i + 1)] for i in range(num_lines)]
 
 def pprint(obj : any, max_deep : int = -1) -> None:
     """Prints a pretty representation of the object.
