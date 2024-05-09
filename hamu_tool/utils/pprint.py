@@ -8,6 +8,8 @@ Functions:
         Prints a pretty representation of the object.
 """
 
+from dataclasses import asdict
+from dataclasses import is_dataclass
 import os
 
 def _pprint(obj : any, max_deep : int = -1, max_width : int = -1) -> list:
@@ -32,7 +34,11 @@ def _pprint(obj : any, max_deep : int = -1, max_width : int = -1) -> list:
 
     if max_deep == 0:
         return ['...']
-    elif type(obj) == list:
+
+    if is_dataclass(obj):
+        obj = asdict(obj)
+
+    if type(obj) == list:
         col0_width = len(f'{len(obj)}') + 2
         cells = []
         for item in obj:
@@ -71,6 +77,7 @@ def _pprint(obj : any, max_deep : int = -1, max_width : int = -1) -> list:
             result[base_y + row_heights[i]][-1] = '+'
             result[base_y][1:col0_width] = f'{i:>{col0_width - 1}}'
         return [''.join(row) for row in result]
+
     elif type(obj) == dict:
         cells = []
         col0_width = 3
