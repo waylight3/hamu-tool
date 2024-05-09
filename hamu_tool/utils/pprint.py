@@ -11,6 +11,7 @@ Functions:
 from dataclasses import asdict
 from dataclasses import is_dataclass
 import inspect
+import io
 import os
 import types
 
@@ -144,6 +145,13 @@ def _pprint(obj : any, max_deep : int = -1, max_width : int = -1) -> list:
             params.append(param_info)
         info = {'Type': my_type, 'Function': func_name, 'Params': params}
         return _pprint(info, max_deep, max_width)
+
+    elif isinstance(obj, io.IOBase):
+        my_type = 'File'
+        file_name = obj.name
+        mode = obj.mode
+        info = {'Type': my_type, 'File': file_name, 'Mode': mode}
+        return _pprint(info, max_deep, max_width)        
 
     elif hasattr(obj, '__dict__'):
         if isinstance(obj, type):
