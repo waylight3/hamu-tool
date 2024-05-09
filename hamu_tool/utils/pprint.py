@@ -12,6 +12,7 @@ from dataclasses import asdict
 from dataclasses import is_dataclass
 import inspect
 import os
+import types
 
 def _pprint(obj : any, max_deep : int = -1, max_width : int = -1) -> list:
     """Returns a pretty representation of the object.
@@ -35,6 +36,9 @@ def _pprint(obj : any, max_deep : int = -1, max_width : int = -1) -> list:
 
     if max_deep == 0:
         return ['...']
+
+    if not obj:
+        return ['']
 
     if is_dataclass(obj):
         obj = asdict(obj)
@@ -120,6 +124,20 @@ def _pprint(obj : any, max_deep : int = -1, max_width : int = -1) -> list:
             result[base_y + row_heights[i]][-1] = '+'
             result[base_y][1:col0_width] = f'{list(obj.keys())[i]:>{col0_width - 1}}'
         return [''.join(row) for row in result]
+
+    elif isinstance(obj, types.FunctionType):
+        my_type = 'Function'
+        func_name = obj.__name__
+        signature = inspect.signature(obj)
+        params = []
+        for param in signature.parameters:
+            param_type = signature.parameters[param].annotation.__name__
+            param_info = f'{param} : {param_type}'
+            if signature.parameters[param].default != inspect.Parameter.empty:
+                param_info += f' = {signature.parameters[param].default}'
+            params.append(param_info)
+        info = {'Type': my_type, 'Function': func_name, 'Params': params}
+        return _pprint(info, max_deep, max_width)
 
     elif hasattr(obj, '__dict__'):
         class_name = obj.__class__.__name__
