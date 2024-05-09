@@ -37,13 +37,16 @@ def _pprint(obj : any, max_deep : int = -1, max_width : int = -1) -> list:
     if max_deep == 0:
         return ['...']
 
-    if not obj:
+    if obj is None:
         return ['']
 
     if is_dataclass(obj):
         obj = asdict(obj)
 
     if type(obj) == list:
+        if len(obj) == 0:
+            return ['']
+
         col0_width = len(f'{len(obj)}') + 2
         cells = []
         for item in obj:
@@ -84,6 +87,9 @@ def _pprint(obj : any, max_deep : int = -1, max_width : int = -1) -> list:
         return [''.join(row) for row in result]
 
     elif type(obj) == dict:
+        if len(obj) == 0:
+            return ['']
+
         cells = []
         col0_width = 3
         for key in obj:
