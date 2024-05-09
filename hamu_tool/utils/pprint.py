@@ -171,7 +171,10 @@ def _pprint(obj : any, max_item : int = -1, max_deep : int = -1, max_width : int
             method_list = []
             for attr in inspect.getmembers(obj):
                 if inspect.isfunction(attr[1]) or inspect.ismethod(attr[1]):
-                    signature = inspect.signature(attr[1])
+                    try:
+                        signature = inspect.signature(attr[1])
+                    except ValueError:
+                        signature = '()'
                     method_info = f'{attr[0]} {signature}'
                     method_list.append(method_info)
 
@@ -184,7 +187,10 @@ def _pprint(obj : any, max_item : int = -1, max_deep : int = -1, max_width : int
             method_list = []
             for attr in inspect.getmembers(obj):
                 if inspect.isfunction(attr[1]) or inspect.ismethod(attr[1]):
-                    signature = inspect.signature(attr[1])
+                    try:
+                        signature = inspect.signature(attr[1])
+                    except:
+                        signature = '()'
                     method_info = f'{attr[0]} {signature}'
                     method_list.append(method_info)
 
@@ -197,7 +203,10 @@ def _pprint(obj : any, max_item : int = -1, max_deep : int = -1, max_width : int
             method_list = []
             for attr in inspect.getmembers(obj.__class__):
                 if inspect.isfunction(attr[1]) or inspect.ismethod(attr[1]):
-                    signature = inspect.signature(attr[1])
+                    try:
+                        signature = inspect.signature(attr[1])
+                    except ValueError:
+                        signature = '()'
                     method_info = f'{attr[0]} {signature}'
                     method_list.append(method_info)
 
