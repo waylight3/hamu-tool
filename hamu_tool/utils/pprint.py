@@ -154,14 +154,15 @@ def _pprint(obj : any, max_deep : int = -1, max_width : int = -1) -> list:
         num_lines = (len(text) + max_width - 1) // max_width
         return [text[max_width * i: max_width * (i + 1)] for i in range(num_lines)]
 
-def pprint(obj : any, max_deep : int = -1) -> None:
+def pprint(obj : any, max_deep : int = -1, max_width : int = -1) -> None:
     """Prints a pretty representation of the object.
 
     Args:
         obj (any): The object to be printed.
         max_deep (int, optional): The maximum depth of the object to be printed. Defaults to -1 (infinite depth).
+        max_width (int, optional): The maximum width of the object to be printed. Defaults to -1 (terminal width).
     """
 
-    table = _pprint(obj, max_deep)
+    table = _pprint(obj, max_deep, max_width)
     text = '\n'.join(table)
     print(text)
