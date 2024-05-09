@@ -15,19 +15,18 @@ import io
 import os
 import types
 
-def _pprint(obj : any, max_deep : int = -1, max_width : int = -1) -> list:
+def _pprint(obj : any, max_item : int = -1, max_deep : int = -1, max_width : int = -1) -> list:
     """Returns a pretty representation of the object.
 
     Args:
         obj (any): The object to be printed.
+        max_item (int, optional): The maximum number of items to be printed. Defaults to -1 (infinite items).
         max_deep (int, optional): The maximum depth of the object to be printed. Defaults to -1 (infinite depth).
         max_width (int, optional): The maximum width of the object to be printed. Defaults to -1 (terminal width).
 
     Returns:
         list: A list of strings representing the pretty representation of the object.
     """
-
-    # print(obj, max_deep, max_width)
 
     if max_width == -1:
         max_width = os.get_terminal_size().columns
@@ -48,10 +47,14 @@ def _pprint(obj : any, max_deep : int = -1, max_width : int = -1) -> list:
         if len(obj) == 0:
             return ['']
 
+        if max_item >= 0 and len(obj) > max_item:
+            obj = obj[:max_item]
+            obj.append('...')
+
         col0_width = len(f'{len(obj)}') + 2
         cells = []
         for item in obj:
-            cells.append(_pprint(item, min(max_deep - 1, -1), max_width - col0_width - 5))
+            cells.append(_pprint(item, max_item, min(max_deep - 1, -1), max_width - col0_width - 5))
         col1_width = 3
         for cell in cells:
             col1_width = max(col1_width, len(cell[0]) + 2)
@@ -91,12 +94,16 @@ def _pprint(obj : any, max_deep : int = -1, max_width : int = -1) -> list:
         if len(obj) == 0:
             return ['']
 
+        if max_item >= 0 and len(obj) > max_item:
+            obj = dict(list(obj.items())[:max_item])
+            obj['...'] = '...'
+
         cells = []
         col0_width = 3
         for key in obj:
             col0_width = max(col0_width, len(f'{key}') + 2)
         for key in obj:
-            cells.append(_pprint(obj[key], min(max_deep - 1, -1), max_width - col0_width - 5))
+            cells.append(_pprint(obj[key], max_item, min(max_deep - 1, -1), max_width - col0_width - 5))
         col1_width = 3
         for cell in cells:
             col1_width = max(col1_width, len(cell[0]) + 2)
@@ -132,6 +139,9 @@ def _pprint(obj : any, max_deep : int = -1, max_width : int = -1) -> list:
             result[base_y][1:col0_width] = f'{list(obj.keys())[i]:>{col0_width - 1}}'
         return [''.join(row) for row in result]
 
+    elif type(obj) == set:
+        return _pprint(sorted(list(obj)), max_item, max_deep, max_width)
+
     elif isinstance(obj, types.FunctionType):
         my_type = 'Function'
         func_name = obj.__name__
@@ -144,14 +154,14 @@ def _pprint(obj : any, max_deep : int = -1, max_width : int = -1) -> list:
                 param_info += f' = {signature.parameters[param].default}'
             params.append(param_info)
         info = {'Type': my_type, 'Function': func_name, 'Params': params}
-        return _pprint(info, max_deep, max_width)
+        return _pprint(info, max_item, max_deep, max_width)
 
     elif isinstance(obj, io.IOBase):
         my_type = 'File'
         file_name = obj.name
         mode = obj.mode
         info = {'Type': my_type, 'File': file_name, 'Mode': mode}
-        return _pprint(info, max_deep, max_width)        
+        return _pprint(info, max_item, max_deep, max_width)        
 
     elif hasattr(obj, '__dict__'):
         if isinstance(obj, type):
@@ -196,26 +206,31 @@ def _pprint(obj : any, max_deep : int = -1, max_width : int = -1) -> list:
             for var in attributes:
                 if not var.startswith('__') and not inspect.ismethod(getattr(obj, var)):
                     var_type = type(attributes[var]).__name__
-                    var_list.append(f'{var} : {var_type} = {attributes[var]}')
+                    max_attr_width = max_width - 11 - len(attributes)
+                    var_list.append(f'{var} : {var_type} = {attributes[var]}'[:max_attr_width*3])
 
             info = {'Type': my_type, 'Class': class_name, 'Methods': method_list, 'Vars': var_list}
 
-        return _pprint(info, max_deep, max_width)
+        return _pprint(info, max_item, max_deep, max_width)
 
     else:
         text = str(obj)
-        num_lines = (len(text) + max_width - 1) // max_width
-        return [text[max_width * i: max_width * (i + 1)] for i in range(num_lines)]
+        lines = text.replace('\r\n', '\n').split('\n')
+        result = []
+        for line in lines:
+            height = (len(line) + max_width - 1) // max_width
+            result += [line[max_width * i: max_width * (i + 1)] for i in range(height)]
+        return result
 
-def pprint(obj : any, max_deep : int = -1, max_width : int = -1) -> None:
+def pprint(obj : any, max_item: int = -1,  max_deep : int = -1, max_width : int = -1) -> None:
     """Prints a pretty representation of the object.
 
     Args:
         obj (any): The object to be printed.
+        max_item (int, optional): The maximum number of items to be printed. Defaults to -1 (infinite items).
         max_deep (int, optional): The maximum depth of the object to be printed. Defaults to -1 (infinite depth).
         max_width (int, optional): The maximum width of the object to be printed. Defaults to -1 (terminal width).
     """
-
-    table = _pprint(obj, max_deep, max_width)
+    table = _pprint(obj, max_item, max_deep, max_width)
     text = '\n'.join(table)
     print(text)
