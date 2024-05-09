@@ -10,6 +10,7 @@ Functions:
 
 from dataclasses import asdict
 from dataclasses import is_dataclass
+import inspect
 import os
 
 def _pprint(obj : any, max_deep : int = -1, max_width : int = -1) -> list:
@@ -119,6 +120,35 @@ def _pprint(obj : any, max_deep : int = -1, max_width : int = -1) -> list:
             result[base_y + row_heights[i]][-1] = '+'
             result[base_y][1:col0_width] = f'{list(obj.keys())[i]:>{col0_width - 1}}'
         return [''.join(row) for row in result]
+
+    elif hasattr(obj, '__dict__'):
+        class_name = obj.__class__.__name__
+        if isinstance(obj, type):
+            my_type = 'Class'
+            class_name = obj.__name__
+        else:
+            my_type = 'Class Instance'
+
+        method_list = []
+        for attr in inspect.getmembers(obj.__class__ if my_type == 'Class Instance' else obj):
+            if inspect.isfunction(attr[1]) or inspect.ismethod(attr[1]):
+                signature = inspect.signature(attr[1])
+                method_info = f'{attr[0]} {signature}'
+                method_list.append(method_info)
+
+        if my_type == 'Class Instance':
+            attributes = obj.__dict__
+            var_list = []
+            for var in attributes:
+                if not var.startswith('__') and not inspect.ismethod(getattr(obj, var)):
+                    var_type = type(attributes[var]).__name__
+                    var_list.append(f'{var} : {var_type} = {attributes[var]}')
+
+        info = {'Type': my_type, 'Class': class_name, 'Methods': method_list}
+        if my_type == 'Class Instance':
+            info['Vars'] = var_list
+        return _pprint(info, max_deep, max_width)
+
     else:
         text = str(obj)
         num_lines = (len(text) + max_width - 1) // max_width
