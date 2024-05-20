@@ -1,6 +1,6 @@
 import fitz
 
-def pdx_to_text(pdf_path : str) -> list[str]:
+def pdf_to_text(pdf_path : str) -> list[str]:
     """Extract text from a PDF file.
 
     Args:
