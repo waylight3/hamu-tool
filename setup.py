@@ -9,7 +9,7 @@ setup(
     author_email='waylight3@snu.ac.kr',
     url='https://github.com/waylight3/hamu-tool',
     keywords=['hamu', 'tool', 'computer', 'science', 'useful', 'toolkit', 'library', 'python', 'package', 'module', 'utility', 'function', 'class', 'method'],
-    install_requires=[],
+    install_requires=['pymupdf'],
     python_requires='>=3.11',
     packages=find_packages(),
     zip_safe=False
