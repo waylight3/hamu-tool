@@ -1,6 +1,5 @@
-from .data_loader_base import DataLoaderQDRBase
+from ..data_loader import BEIRDataLoader
 from dataclasses import dataclass
-from typing import Iterator
 
 @dataclass
 class Touchev2QueryInstance:
@@ -23,7 +22,7 @@ class Touchev2QrelInstance:
     did : str
     score : int
 
-class Touchev2DataLoader(DataLoaderQDRBase):
+class Touchev2DataLoader(BEIRDataLoader):
     def __init__(self, *args, **kwargs):
         super().__init__('beir/touche-v2', *args, **kwargs)
 

@@ -1,6 +1,5 @@
-from .data_loader_base import DataLoaderQDRBase
+from ..data_loader import BEIRDataLoader
 from dataclasses import dataclass
-from typing import Iterator
 
 @dataclass
 class Robust04QueryInstance:
@@ -18,7 +17,7 @@ class Robust04QrelInstance:
     did : str
     score : int
 
-class Robust04DataLoader(DataLoaderQDRBase):
+class Robust04DataLoader(BEIRDataLoader):
     def __init__(self, *args, **kwargs):
         super().__init__('beir/robust04', *args, **kwargs)
 

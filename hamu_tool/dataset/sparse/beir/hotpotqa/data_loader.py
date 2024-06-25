@@ -1,6 +1,5 @@
-from .data_loader_base import DataLoaderQDRBase
+from ..data_loader import BEIRDataLoader
 from dataclasses import dataclass
-from typing import Iterator
 
 @dataclass
 class HotpotQAQueryInstance:
@@ -20,7 +19,7 @@ class HotpotQAQrelInstance:
     did : str
     score : int
 
-class HotpotQADataLoader(DataLoaderQDRBase):
+class HotpotQADataLoader(BEIRDataLoader):
     def __init__(self, *args, **kwargs):
         super().__init__('beir/hotpotqa', *args, **kwargs)
 

@@ -1,6 +1,5 @@
-from .data_loader_base import DataLoaderQDRBase
+from ..data_loader import BEIRDataLoader
 from dataclasses import dataclass
-from typing import Iterator
 
 @dataclass
 class ClimateFEVERQueryInstance:
@@ -19,7 +18,7 @@ class ClimateFEVERQrelInstance:
     did : str
     score : int
 
-class ClimateFEVERDataLoader(DataLoaderQDRBase):
+class ClimateFEVERDataLoader(BEIRDataLoader):
     def __init__(self, *args, **kwargs):
         super().__init__('beir/climate-fever', *args, **kwargs)
 

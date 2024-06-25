@@ -1,6 +1,5 @@
-from .data_loader_base import DataLoaderQDRBase
+from ..data_loader import BEIRDataLoader
 from dataclasses import dataclass
-from typing import Iterator
 
 @dataclass
 class BioASQQueryInstance:
@@ -23,7 +22,7 @@ class BioASQQrelInstance:
     did : str
     score : int
 
-class BioASQDataLoader(DataLoaderQDRBase):
+class BioASQDataLoader(BEIRDataLoader):
     def __init__(self, *args, **kwargs):
         super().__init__('beir/bioasq', *args, **kwargs)
 

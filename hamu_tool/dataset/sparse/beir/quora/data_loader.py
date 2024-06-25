@@ -1,6 +1,5 @@
-from .data_loader_base import DataLoaderQDRBase
+from ..data_loader import BEIRDataLoader
 from dataclasses import dataclass
-from typing import Iterator
 
 @dataclass
 class QuoraQueryInstance:
@@ -18,7 +17,7 @@ class QuoraQrelInstance:
     did : str
     score : int
 
-class QuoraDataLoader(DataLoaderQDRBase):
+class QuoraDataLoader(BEIRDataLoader):
     def __init__(self, *args, **kwargs):
         super().__init__('beir/quora', *args, **kwargs)
 

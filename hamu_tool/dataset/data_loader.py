@@ -1,23 +1,24 @@
-from .arguana_data_loader import ArguanaDataLoader
-from .bioasq_data_loader import BioASQDataLoader
-from .climate_fever_data_loader import ClimateFEVERDataLoader
-from .dbpedia_data_loader import DBPediaDataLoader
-from .fever_data_loader import FEVERDataLoader
-from .fiqa_data_loader import FiQADataLoader
-from .hotpotqa_data_loader import HotpotQADataLoader
-from .msmarco_data_loader import MSMARCODataLoader
-from .nfcorpus_data_loader import NFCorpusDataLoader
-from .nq_data_loader import NQDataLoader
-from .quora_data_loader import QuoraDataLoader
-from .robust04_data_loader import Robust04DataLoader
-from .scidocs_data_loader import SciDocsDataLoader
-from .scifact_data_loader import SciFactDataLoader
-from .signal1m_data_loader import Signal1MDataLoader
-from .touche_data_loader import ToucheDataLoader
-from .touche_v2_data_loader import Touchev2DataLoader
-from .trec_covid_data_loader import TrecCovidDataLoader
-from .trec_news_data_loader import TrecNewsDataLoader
 import requests
+
+from .sparse.beir import ArguanaDataLoader
+from .sparse.beir import BioASQDataLoader
+from .sparse.beir import ClimateFEVERDataLoader
+from .sparse.beir import DBPediaDataLoader
+from .sparse.beir import FEVERDataLoader
+from .sparse.beir import FiQADataLoader
+from .sparse.beir import HotpotQADataLoader
+from .sparse.beir import MSMARCODataLoader
+from .sparse.beir import NFCorpusDataLoader
+from .sparse.beir import NQDataLoader
+from .sparse.beir import QuoraDataLoader
+from .sparse.beir import Robust04DataLoader
+from .sparse.beir import SciDocsDataLoader
+from .sparse.beir import SciFactDataLoader
+from .sparse.beir import Signal1MDataLoader
+from .sparse.beir import ToucheDataLoader
+from .sparse.beir import Touchev2DataLoader
+from .sparse.beir import TrecCovidDataLoader
+from .sparse.beir import TrecNewsDataLoader
 
 class DataLoader:
     """DataLoader class to load dataset from the list of available datasets
@@ -44,7 +45,7 @@ class DataLoader:
             raise Exception('Failed to fetch dataset list')
 
     @staticmethod
-    def load(dataset_name : str, *args, **kwargs) -> ArguanaDataLoader | BioASQDataLoader | ClimateFEVERDataLoader | DBPediaDataLoader | FEVERDataLoader | FiQADataLoader | HotpotQADataLoader | MSMARCODataLoader | NFCorpusDataLoader | NQDataLoader | QuoraDataLoader | Robust04DataLoader | SciDocsDataLoader | SciFactDataLoader | Signal1MDataLoader | ToucheDataLoader | Touchev2DataLoader | TrecCovidDataLoader | TrecNewsDataLoader:
+    def load(dataset_name : str, *args, **kwargs) -> any:
         """Load the dataset with the given name.
 
         Args:

@@ -1,6 +1,5 @@
-from .data_loader_base import DataLoaderQDRBase
+from ..data_loader import BEIRDataLoader
 from dataclasses import dataclass
-from typing import Iterator
 
 @dataclass
 class Signal1MQueryInstance:
@@ -18,7 +17,7 @@ class Signal1MQrelInstance:
     did : str
     score : int
 
-class Signal1MDataLoader(DataLoaderQDRBase):
+class Signal1MDataLoader(BEIRDataLoader):
     def __init__(self, *args, **kwargs):
         super().__init__('beir/signal1m', *args, **kwargs)
 

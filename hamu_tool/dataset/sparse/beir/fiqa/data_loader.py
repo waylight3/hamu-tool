@@ -1,6 +1,5 @@
-from .data_loader_base import DataLoaderQDRBase
+from ..data_loader import BEIRDataLoader
 from dataclasses import dataclass
-from typing import Iterator
 
 @dataclass
 class FiQAQueryInstance:
@@ -18,7 +17,7 @@ class FiQAQrelInstance:
     did : str
     score : int
 
-class FiQADataLoader(DataLoaderQDRBase):
+class FiQADataLoader(BEIRDataLoader):
     def __init__(self, *args, **kwargs):
         super().__init__('beir/fiqa', *args, **kwargs)
 

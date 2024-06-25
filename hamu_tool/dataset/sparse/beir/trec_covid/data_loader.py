@@ -1,6 +1,5 @@
-from .data_loader_base import DataLoaderQDRBase
+from ..data_loader import BEIRDataLoader
 from dataclasses import dataclass
-from typing import Iterator
 
 @dataclass
 class TrecCovidQueryInstance:
@@ -22,7 +21,7 @@ class TrecCovidQrelInstance:
     did : str
     score : int
 
-class TrecCovidDataLoader(DataLoaderQDRBase):
+class TrecCovidDataLoader(BEIRDataLoader):
     def __init__(self, *args, **kwargs):
         super().__init__('beir/trec-covid', *args, **kwargs)
 

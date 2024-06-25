@@ -1,6 +1,5 @@
-from .data_loader_base import DataLoaderQDRBase
+from ..data_loader import BEIRDataLoader
 from dataclasses import dataclass
-from typing import Iterator
 
 @dataclass
 class NFCorpusQueryInstance:
@@ -21,7 +20,7 @@ class NFCorpusQrelInstance:
     did : str
     score : int
 
-class NFCorpusDataLoader(DataLoaderQDRBase):
+class NFCorpusDataLoader(BEIRDataLoader):
     def __init__(self, *args, **kwargs):
         super().__init__('beir/nfcorpus', *args, **kwargs)
 

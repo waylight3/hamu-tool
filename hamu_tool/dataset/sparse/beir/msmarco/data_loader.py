@@ -1,6 +1,5 @@
-from .data_loader_base import DataLoaderQDRBase
+from ..data_loader import BEIRDataLoader
 from dataclasses import dataclass
-from typing import Iterator
 
 @dataclass
 class MSMARCOQueryInstance:
@@ -18,7 +17,7 @@ class MSMARCOQrelInstance:
     did : str
     score : int
 
-class MSMARCODataLoader(DataLoaderQDRBase):
+class MSMARCODataLoader(BEIRDataLoader):
     def __init__(self, *args, **kwargs):
         super().__init__('beir/msmarco', *args, **kwargs)
 
