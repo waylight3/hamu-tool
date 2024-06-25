@@ -1,5 +1,5 @@
 import glob
-
+from dataclasses import asdict
 from ....utils import CorpusReader
 from ...data_loader_base import DataLoaderBase
 

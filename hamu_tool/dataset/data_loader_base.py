@@ -1,4 +1,3 @@
-from dataclasses import asdict
 from tqdm import tqdm
 import os
 import requests
