@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='hamu-tool',
-    version='0.0.15',
+    version='0.0.16',
     description='Many useful tools for computer scientists!',
     license='MIT',
     author='DoHyeon Lee',
