@@ -1,24 +1,42 @@
 import requests
 
-from .sparse.beir import ArguanaDataLoader
-from .sparse.beir import BioASQDataLoader
-from .sparse.beir import ClimateFEVERDataLoader
-from .sparse.beir import DBPediaDataLoader
-from .sparse.beir import FEVERDataLoader
-from .sparse.beir import FiQADataLoader
-from .sparse.beir import HotpotQADataLoader
-from .sparse.beir import MSMARCODataLoader
-from .sparse.beir import NFCorpusDataLoader
-from .sparse.beir import NQDataLoader
-from .sparse.beir import QuoraDataLoader
-from .sparse.beir import Robust04DataLoader
-from .sparse.beir import SciDocsDataLoader
-from .sparse.beir import SciFactDataLoader
-from .sparse.beir import Signal1MDataLoader
-from .sparse.beir import ToucheDataLoader
-from .sparse.beir import Touchev2DataLoader
-from .sparse.beir import TrecCovidDataLoader
-from .sparse.beir import TrecNewsDataLoader
+from .sparse.beir import BEIRArguanaDataLoader
+from .sparse.beir import BEIRBioASQDataLoader
+from .sparse.beir import BEIRClimateFEVERDataLoader
+from .sparse.beir import BEIRDBPediaDataLoader
+from .sparse.beir import BEIRFEVERDataLoader
+from .sparse.beir import BEIRFiQADataLoader
+from .sparse.beir import BEIRHotpotQADataLoader
+from .sparse.beir import BEIRMSMARCODataLoader
+from .sparse.beir import BEIRNFCorpusDataLoader
+from .sparse.beir import BEIRNQDataLoaderader
+from .sparse.beir import BEIRQuoraDataLoader
+from .sparse.beir import BEIRRobust04DataLoader
+from .sparse.beir import BEIRSciDocsDataLoader
+from .sparse.beir import BEIRSciFactDataLoader
+from .sparse.beir import BEIRSignal1MDataLoader
+from .sparse.beir import BEIRToucheDataLoader
+from .sparse.beir import BEIRTouchev2DataLoader
+from .sparse.beir import BEIRTrecCovidDataLoader
+from .sparse.beir import BEIRTrecNewsDataLoader
+
+from .sparse.gpl import GPLArguanaDataLoader
+from .sparse.gpl import GPLBioASQDataLoader
+from .sparse.gpl import GPLClimateFEVERDataLoader
+from .sparse.gpl import GPLDBPediaDataLoader
+from .sparse.gpl import GPLFEVERDataLoader
+from .sparse.gpl import GPLFiQADataLoader
+from .sparse.gpl import GPLHotpotQADataLoader
+from .sparse.gpl import GPLNFCorpusDataLoader
+from .sparse.gpl import GPLNQDataLoader
+from .sparse.gpl import GPLQuoraDataLoader
+from .sparse.gpl import GPLRobust04DataLoader
+from .sparse.gpl import GPLSciDocsDataLoader
+from .sparse.gpl import GPLSciFactDataLoader
+from .sparse.gpl import GPLSignal1MDataLoader
+from .sparse.gpl import GPLToucheDataLoader
+from .sparse.gpl import GPLTrecCovidDataLoader
+from .sparse.gpl import GPLTrecNewsDataLoader
 
 class DataLoader:
     """DataLoader class to load dataset from the list of available datasets

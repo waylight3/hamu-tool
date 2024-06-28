@@ -2,38 +2,38 @@ from ..data_loader import BEIRDataLoader
 from dataclasses import dataclass
 
 @dataclass
-class DBPediaQueryInstance:
+class BEIRDBPediaQueryInstance:
     id : str
     text : str
 
 @dataclass
-class DBPediaDocInstance:
+class BEIRDBPediaDocInstance:
     id : str
     text : str
     title : str
     url : str
 
 @dataclass
-class DBPediaQrelInstance:
+class BEIRDBPediaQrelInstance:
     qid : str
     did : str
     score : int
 
-class DBPediaDataLoader(BEIRDataLoader):
+class BEIRDBPediaDataLoader(BEIRDataLoader):
     def __init__(self, *args, **kwargs):
         super().__init__('beir/dbpedia', *args, **kwargs)
 
-    def make_query_instance(self, **kwargs) -> DBPediaQueryInstance:
-        return DBPediaQueryInstance(**kwargs)
+    def make_query_instance(self, **kwargs) -> BEIRDBPediaQueryInstance:
+        return BEIRDBPediaQueryInstance(**kwargs)
 
-    def make_doc_instance(self, **kwargs) -> DBPediaDocInstance:
-        return DBPediaDocInstance(**kwargs)
+    def make_doc_instance(self, **kwargs) -> BEIRDBPediaDocInstance:
+        return BEIRDBPediaDocInstance(**kwargs)
 
-    def make_qrel_instance(self, **kwargs) -> DBPediaQrelInstance:
-        return DBPediaQrelInstance(**kwargs)
+    def make_qrel_instance(self, **kwargs) -> BEIRDBPediaQrelInstance:
+        return BEIRDBPediaQrelInstance(**kwargs)
 
     def __str__(self) -> str:
-        return 'DBPediaDataLoader()'
+        return 'BEIRDBPediaDataLoader()'
 
     def __repr__(self) -> str:
-        return 'DBPediaDataLoader()'
+        return 'BEIRDBPediaDataLoader()'

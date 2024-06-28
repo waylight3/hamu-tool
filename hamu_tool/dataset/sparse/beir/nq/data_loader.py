@@ -2,37 +2,37 @@ from ..data_loader import BEIRDataLoader
 from dataclasses import dataclass
 
 @dataclass
-class NQQueryInstance:
+class BEIRNQQueryInstance:
     id : str
     text : str
 
 @dataclass
-class NQDocInstance:
+class BEIRNQDocInstance:
     id : str
     text : str
     title : str
 
 @dataclass
-class NQQrelInstance:
+class BEIRNQQrelInstance:
     qid : str
     did : str
     score : int
 
-class NQDataLoader(BEIRDataLoader):
+class BEIRNQDataLoaderader(BEIRDataLoader):
     def __init__(self, *args, **kwargs):
         super().__init__('beir/nq', *args, **kwargs)
 
-    def make_query_instance(self, **kwargs) -> NQQueryInstance:
-        return NQQueryInstance(**kwargs)
+    def make_query_instance(self, **kwargs) -> BEIRNQQueryInstance:
+        return BEIRNQQueryInstance(**kwargs)
 
-    def make_doc_instance(self, **kwargs) -> NQDocInstance:
-        return NQDocInstance(**kwargs)
+    def make_doc_instance(self, **kwargs) -> BEIRNQDocInstance:
+        return BEIRNQDocInstance(**kwargs)
 
-    def make_qrel_instance(self, **kwargs) -> NQQrelInstance:
-        return NQQrelInstance(**kwargs)
+    def make_qrel_instance(self, **kwargs) -> BEIRNQQrelInstance:
+        return BEIRNQQrelInstance(**kwargs)
 
     def __str__(self) -> str:
-        return 'NQDataLoader()'
+        return 'BEIRNQDataLoader()'
 
     def __repr__(self) -> str:
-        return 'NQDataLoader()'
+        return 'BEIRNQDataLoader()'

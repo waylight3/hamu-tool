@@ -2,36 +2,36 @@ from ..data_loader import BEIRDataLoader
 from dataclasses import dataclass
 
 @dataclass
-class FiQAQueryInstance:
+class BEIRFiQAQueryInstance:
     id : str
     text : str
 
 @dataclass
-class FiQADocInstance:
+class BEIRFiQADocInstance:
     id : str
     text : str
 
 @dataclass
-class FiQAQrelInstance:
+class BEIRFiQAQrelInstance:
     qid : str
     did : str
     score : int
 
-class FiQADataLoader(BEIRDataLoader):
+class BEIRFiQADataLoader(BEIRDataLoader):
     def __init__(self, *args, **kwargs):
         super().__init__('beir/fiqa', *args, **kwargs)
 
-    def make_query_instance(self, **kwargs) -> FiQAQueryInstance:
-        return FiQAQueryInstance(**kwargs)
+    def make_query_instance(self, **kwargs) -> BEIRFiQAQueryInstance:
+        return BEIRFiQAQueryInstance(**kwargs)
 
-    def make_doc_instance(self, **kwargs) -> FiQADocInstance:
-        return FiQADocInstance(**kwargs)
+    def make_doc_instance(self, **kwargs) -> BEIRFiQADocInstance:
+        return BEIRFiQADocInstance(**kwargs)
 
-    def make_qrel_instance(self, **kwargs) -> FiQAQrelInstance:
-        return FiQAQrelInstance(**kwargs)
+    def make_qrel_instance(self, **kwargs) -> BEIRFiQAQrelInstance:
+        return BEIRFiQAQrelInstance(**kwargs)
 
     def __str__(self) -> str:
-        return 'FiQADataLoader()'
+        return 'BEIRFiQADataLoader()'
 
     def __repr__(self) -> str:
-        return 'FiQADataLoader()'
+        return 'BEIRFiQADataLoader()'

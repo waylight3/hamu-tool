@@ -2,12 +2,12 @@ from ..data_loader import BEIRDataLoader
 from dataclasses import dataclass
 
 @dataclass
-class TrecNewsQueryInstance:
+class BEIRTrecNewsQueryInstance:
     id : str
     text : str
 
 @dataclass
-class TrecNewsDocInstance:
+class BEIRTrecNewsDocInstance:
     id : str
     text : str
     title : str
@@ -18,26 +18,26 @@ class TrecNewsDocInstance:
     published_date : int
 
 @dataclass
-class TrecNewsQrelInstance:
+class BEIRTrecNewsQrelInstance:
     qid : str
     did : str
     score : int
 
-class TrecNewsDataLoader(BEIRDataLoader):
+class BEIRTrecNewsDataLoader(BEIRDataLoader):
     def __init__(self, *args, **kwargs):
         super().__init__('beir/trec-news', *args, **kwargs)
 
-    def make_query_instance(self, **kwargs) -> TrecNewsQueryInstance:
-        return TrecNewsQueryInstance(**kwargs)
+    def make_query_instance(self, **kwargs) -> BEIRTrecNewsQueryInstance:
+        return BEIRTrecNewsQueryInstance(**kwargs)
 
-    def make_doc_instance(self, **kwargs) -> TrecNewsDocInstance:
-        return TrecNewsDocInstance(**kwargs)
+    def make_doc_instance(self, **kwargs) -> BEIRTrecNewsDocInstance:
+        return BEIRTrecNewsDocInstance(**kwargs)
 
-    def make_qrel_instance(self, **kwargs) -> TrecNewsQrelInstance:
-        return TrecNewsQrelInstance(**kwargs)
+    def make_qrel_instance(self, **kwargs) -> BEIRTrecNewsQrelInstance:
+        return BEIRTrecNewsQrelInstance(**kwargs)
 
     def __str__(self) -> str:
-        return 'TrecNewsDataLoader()'
+        return 'BEIRTrecNewsDataLoader()'
 
     def __repr__(self) -> str:
-        return 'TrecNewsDataLoader()'
+        return 'BEIRTrecNewsDataLoader()'

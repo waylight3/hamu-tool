@@ -2,36 +2,36 @@ from ..data_loader import BEIRDataLoader
 from dataclasses import dataclass
 
 @dataclass
-class Signal1MQueryInstance:
+class BEIRSignal1MQueryInstance:
     id : str
     text : str
 
 @dataclass
-class Signal1MDocInstance:
+class BEIRSignal1MDocInstance:
     id : str
     text : str
 
 @dataclass
-class Signal1MQrelInstance:
+class BEIRSignal1MQrelInstance:
     qid : str
     did : str
     score : int
 
-class Signal1MDataLoader(BEIRDataLoader):
+class BEIRSignal1MDataLoader(BEIRDataLoader):
     def __init__(self, *args, **kwargs):
         super().__init__('beir/signal1m', *args, **kwargs)
 
-    def make_query_instance(self, **kwargs) -> Signal1MQueryInstance:
-        return Signal1MQueryInstance(**kwargs)
+    def make_query_instance(self, **kwargs) -> BEIRSignal1MQueryInstance:
+        return BEIRSignal1MQueryInstance(**kwargs)
 
-    def make_doc_instance(self, **kwargs) -> Signal1MDocInstance:
-        return Signal1MDocInstance(**kwargs)
+    def make_doc_instance(self, **kwargs) -> BEIRSignal1MDocInstance:
+        return BEIRSignal1MDocInstance(**kwargs)
 
-    def make_qrel_instance(self, **kwargs) -> Signal1MQrelInstance:
-        return Signal1MQrelInstance(**kwargs)
+    def make_qrel_instance(self, **kwargs) -> BEIRSignal1MQrelInstance:
+        return BEIRSignal1MQrelInstance(**kwargs)
 
     def __str__(self) -> str:
-        return 'Signal1MDataLoader()'
+        return 'BEIRSignal1MDataLoader()'
 
     def __repr__(self) -> str:
-        return 'Signal1MDataLoader()'
+        return 'BEIRSignal1MDataLoader()'

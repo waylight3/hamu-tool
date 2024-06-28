@@ -2,12 +2,12 @@ from ..data_loader import BEIRDataLoader
 from dataclasses import dataclass
 
 @dataclass
-class BioASQQueryInstance:
+class BEIRBioASQQueryInstance:
     id : str
     text : str
 
 @dataclass
-class BioASQDocInstance:
+class BEIRBioASQDocInstance:
     id : str
     text : str
     title : str
@@ -17,26 +17,26 @@ class BioASQDocInstance:
     mesh_major : list[str]
 
 @dataclass
-class BioASQQrelInstance:
+class BEIRBioASQQrelInstance:
     qid : str
     did : str
     score : int
 
-class BioASQDataLoader(BEIRDataLoader):
+class BEIRBioASQDataLoader(BEIRDataLoader):
     def __init__(self, *args, **kwargs):
         super().__init__('beir/bioasq', *args, **kwargs)
 
-    def make_query_instance(self, **kwargs) -> BioASQQueryInstance:
-        return BioASQQueryInstance(**kwargs)
+    def make_query_instance(self, **kwargs) -> BEIRBioASQQueryInstance:
+        return BEIRBioASQQueryInstance(**kwargs)
 
-    def make_doc_instance(self, **kwargs) -> BioASQDocInstance:
-        return BioASQDocInstance(**kwargs)
+    def make_doc_instance(self, **kwargs) -> BEIRBioASQDocInstance:
+        return BEIRBioASQDocInstance(**kwargs)
 
-    def make_qrel_instance(self, **kwargs) -> BioASQQrelInstance:
-        return BioASQQrelInstance(**kwargs)
+    def make_qrel_instance(self, **kwargs) -> BEIRBioASQQrelInstance:
+        return BEIRBioASQQrelInstance(**kwargs)
 
     def __str__(self) -> str:
-        return 'BioASQDataLoader()'
+        return 'BEIRBioASQDataLoader()'
 
     def __repr__(self) -> str:
-        return 'BioASQDataLoader()'
+        return 'BEIRBioASQDataLoader()'

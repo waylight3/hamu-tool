@@ -2,36 +2,36 @@ from ..data_loader import BEIRDataLoader
 from dataclasses import dataclass
 
 @dataclass
-class QuoraQueryInstance:
+class BEIRQuoraQueryInstance:
     id : str
     text : str
 
 @dataclass
-class QuoraDocInstance:
+class BEIRQuoraDocInstance:
     id : str
     text : str
 
 @dataclass
-class QuoraQrelInstance:
+class BEIRQuoraQrelInstance:
     qid : str
     did : str
     score : int
 
-class QuoraDataLoader(BEIRDataLoader):
+class BEIRQuoraDataLoader(BEIRDataLoader):
     def __init__(self, *args, **kwargs):
         super().__init__('beir/quora', *args, **kwargs)
 
-    def make_query_instance(self, **kwargs) -> QuoraQueryInstance:
-        return QuoraQueryInstance(**kwargs)
+    def make_query_instance(self, **kwargs) -> BEIRQuoraQueryInstance:
+        return BEIRQuoraQueryInstance(**kwargs)
 
-    def make_doc_instance(self, **kwargs) -> QuoraDocInstance:
-        return QuoraDocInstance(**kwargs)
+    def make_doc_instance(self, **kwargs) -> BEIRQuoraDocInstance:
+        return BEIRQuoraDocInstance(**kwargs)
 
-    def make_qrel_instance(self, **kwargs) -> QuoraQrelInstance:
-        return QuoraQrelInstance(**kwargs)
+    def make_qrel_instance(self, **kwargs) -> BEIRQuoraQrelInstance:
+        return BEIRQuoraQrelInstance(**kwargs)
 
     def __str__(self) -> str:
-        return 'QuoraDataLoader()'
+        return 'BEIRQuoraDataLoader()'
 
     def __repr__(self) -> str:
-        return 'QuoraDataLoader()'
+        return 'BEIRQuoraDataLoader()'

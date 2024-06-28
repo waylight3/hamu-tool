@@ -2,13 +2,13 @@ from ..data_loader import BEIRDataLoader
 from dataclasses import dataclass
 
 @dataclass
-class TrecCovidQueryInstance:
+class BEIRTrecCovidQueryInstance:
     id : str
     text : str
     narrative : str
 
 @dataclass
-class TrecCovidDocInstance:
+class BEIRTrecCovidDocInstance:
     id : str
     text : str
     title : str
@@ -16,26 +16,26 @@ class TrecCovidDocInstance:
     pubmed_id : str
 
 @dataclass
-class TrecCovidQrelInstance:
+class BEIRTrecCovidQrelInstance:
     qid : str
     did : str
     score : int
 
-class TrecCovidDataLoader(BEIRDataLoader):
+class BEIRTrecCovidDataLoader(BEIRDataLoader):
     def __init__(self, *args, **kwargs):
         super().__init__('beir/trec-covid', *args, **kwargs)
 
-    def make_query_instance(self, **kwargs) -> TrecCovidQueryInstance:
-        return TrecCovidQueryInstance(**kwargs)
+    def make_query_instance(self, **kwargs) -> BEIRTrecCovidQueryInstance:
+        return BEIRTrecCovidQueryInstance(**kwargs)
 
-    def make_doc_instance(self, **kwargs) -> TrecCovidDocInstance:
-        return TrecCovidDocInstance(**kwargs)
+    def make_doc_instance(self, **kwargs) -> BEIRTrecCovidDocInstance:
+        return BEIRTrecCovidDocInstance(**kwargs)
 
-    def make_qrel_instance(self, **kwargs) -> TrecCovidQrelInstance:
-        return TrecCovidQrelInstance(**kwargs)
+    def make_qrel_instance(self, **kwargs) -> BEIRTrecCovidQrelInstance:
+        return BEIRTrecCovidQrelInstance(**kwargs)
 
     def __str__(self) -> str:
-        return 'TrecCovidDataLoader()'
+        return 'BEIRTrecCovidDataLoader()'
 
     def __repr__(self) -> str:
-        return 'TrecCovidDataLoader()'
+        return 'BEIRTrecCovidDataLoader()'

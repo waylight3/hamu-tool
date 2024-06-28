@@ -2,38 +2,38 @@ from ..data_loader import BEIRDataLoader
 from dataclasses import dataclass
 
 @dataclass
-class HotpotQAQueryInstance:
+class BEIRHotpotQAQueryInstance:
     id : str
     text : str
 
 @dataclass
-class HotpotQADocInstance:
+class BEIRHotpotQADocInstance:
     id : str
     text : str
     title : str
     url : str
 
 @dataclass
-class HotpotQAQrelInstance:
+class BEIRHotpotQAQrelInstance:
     qid : str
     did : str
     score : int
 
-class HotpotQADataLoader(BEIRDataLoader):
+class BEIRHotpotQADataLoader(BEIRDataLoader):
     def __init__(self, *args, **kwargs):
         super().__init__('beir/hotpotqa', *args, **kwargs)
 
-    def make_query_instance(self, **kwargs) -> HotpotQAQueryInstance:
-        return HotpotQAQueryInstance(**kwargs)
+    def make_query_instance(self, **kwargs) -> BEIRHotpotQAQueryInstance:
+        return BEIRHotpotQAQueryInstance(**kwargs)
 
-    def make_doc_instance(self, **kwargs) -> HotpotQADocInstance:
-        return HotpotQADocInstance(**kwargs)
+    def make_doc_instance(self, **kwargs) -> BEIRHotpotQADocInstance:
+        return BEIRHotpotQADocInstance(**kwargs)
 
-    def make_qrel_instance(self, **kwargs) -> HotpotQAQrelInstance:
-        return HotpotQAQrelInstance(**kwargs)
+    def make_qrel_instance(self, **kwargs) -> BEIRHotpotQAQrelInstance:
+        return BEIRHotpotQAQrelInstance(**kwargs)
 
     def __str__(self) -> str:
-        return 'HotpotQADataLoader()'
+        return 'BEIRHotpotQADataLoader()'
 
     def __repr__(self) -> str:
-        return 'HotpotQADataLoader()'
+        return 'BEIRHotpotQADataLoader()'

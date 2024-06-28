@@ -2,37 +2,37 @@ from ..data_loader import BEIRDataLoader
 from dataclasses import dataclass
 
 @dataclass
-class ClimateFEVERQueryInstance:
+class BEIRClimateFEVERQueryInstance:
     id : str
     text : str
 
 @dataclass
-class ClimateFEVERDocInstance:
+class BEIRClimateFEVERDocInstance:
     id : str
     text : str
     title : str
 
 @dataclass
-class ClimateFEVERQrelInstance:
+class BEIRClimateFEVERQrelInstance:
     qid : str
     did : str
     score : int
 
-class ClimateFEVERDataLoader(BEIRDataLoader):
+class BEIRClimateFEVERDataLoader(BEIRDataLoader):
     def __init__(self, *args, **kwargs):
         super().__init__('beir/climate-fever', *args, **kwargs)
 
-    def make_query_instance(self, **kwargs) -> ClimateFEVERQueryInstance:
-        return ClimateFEVERQueryInstance(**kwargs)
+    def make_query_instance(self, **kwargs) -> BEIRClimateFEVERQueryInstance:
+        return BEIRClimateFEVERQueryInstance(**kwargs)
 
-    def make_doc_instance(self, **kwargs) -> ClimateFEVERDocInstance:
-        return ClimateFEVERDocInstance(**kwargs)
+    def make_doc_instance(self, **kwargs) -> BEIRClimateFEVERDocInstance:
+        return BEIRClimateFEVERDocInstance(**kwargs)
 
-    def make_qrel_instance(self, **kwargs) -> ClimateFEVERQrelInstance:
-        return ClimateFEVERQrelInstance(**kwargs)
+    def make_qrel_instance(self, **kwargs) -> BEIRClimateFEVERQrelInstance:
+        return BEIRClimateFEVERQrelInstance(**kwargs)
 
     def __str__(self) -> str:
-        return 'ClimateFEVERDataLoader()'
+        return 'BEIRClimateFEVERDataLoader()'
 
     def __repr__(self) -> str:
-        return 'ClimateFEVERDataLoader()'
+        return 'BEIRClimateFEVERDataLoader()'

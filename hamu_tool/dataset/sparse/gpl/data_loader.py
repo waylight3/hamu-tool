@@ -1,13 +1,14 @@
 import glob
+import json
 from dataclasses import asdict
 from ....utils import CorpusReader
 from ...data_loader_base import DataLoaderBase
 
-class BEIRDataLoader(DataLoaderBase):
-    """Base class for BEIR DataLoaders
+class GPLDataLoader(DataLoaderBase):
+    """Base class for GPL DataLoaders
     """
     def __init__(self, dataset_name : str, *args, **kwargs):
-        """Constructor for BEIRDataLoader
+        """Constructor for GPLDataLoader
 
         Args:
             dataset_name (str): Name of the dataset to load.
@@ -46,6 +47,25 @@ class BEIRDataLoader(DataLoaderBase):
                     if did not in self.did_set:
                         self.did_set.add(did)
                         self.did_list[mode].append(did)
+        self.hneg = {}
+        hneg_paths = glob.glob(f'{self.data_dir}/hneg.*.jsonl')
+        for hneg_path in hneg_paths:
+            model = hneg_path.split('.')[-2]
+            self.hneg[model] = {}
+            with open(hneg_path, 'r', encoding='utf-8') as fp:
+                for line in fp:
+                    data = json.loads(line)
+                    self.hneg[model][data['qid']] = data['hneg']
+        self.triple = {}
+        triple_paths = glob.glob(f'{self.data_dir}/triple.*.tsv')
+        for triple_path in triple_paths:
+            mode = triple_path.split('.')[-2]
+            self.triple[mode] = []
+            with open(triple_path, 'r', encoding='utf-8') as fp:
+                for line in fp:
+                    qid, pos, neg, score = line.strip().split()
+                    score = float(score)
+                    self.triple[mode].append((qid, pos, neg, score))
 
     def total_docs(self, mode : str = None) -> int:
         """Total number of documents in the dataset.
@@ -149,6 +169,28 @@ class BEIRDataLoader(DataLoaderBase):
 
         Returns:
             QrelInstance: The qrel instance dataclass.
+        """
+        raise NotImplementedError
+
+    def make_hneg_instance(self, **kwargs):
+        """Make a hard negative instance.
+
+        Args:
+            **kwargs: Keyword arguments for the hard negative instance.
+
+        Returns:
+            HnegInstance: The hard negative instance dataclass.
+        """
+        raise NotImplementedError
+
+    def make_triple_instance(self, **kwargs):
+        """Make a triple instance.
+
+        Args:
+            **kwargs: Keyword arguments for the triple instance.
+
+        Returns:
+            TripleInstance: The triple instance dataclass.
         """
         raise NotImplementedError
 
@@ -289,3 +331,33 @@ class BEIRDataLoader(DataLoaderBase):
             list[QrelInstance]: List of fetched drel instances.
         """
         return self.get_qrels(mode)
+
+    def get_hneg(self, qid : str | int, model : str):
+        """Fetch the hard negatives by query ID.
+
+        Args:
+            qid (str | int): The query ID or index.
+            model (str): The model name.
+
+        Returns:
+            list[str]: List of hard negatives.
+        """
+        if isinstance(qid, int):
+            qid = self.get_qid(qid)
+        instances = []
+        for did in self.hneg[model][qid]:
+            instances.append(self.make_hneg_instance(qid=qid, did=did))
+        return instances
+
+    def get_triples(self, mode : str):
+        """Fetch all triples.
+
+        Args:
+            mode (str): Mode of the dataset.
+
+        Yields:
+            tuple[str, str, str, str]: The fetched triple.
+        """
+        for qid, pos, neg, score in self.triple[mode]:
+            instance = self.make_triple_instance(qid=qid, pos=pos, neg=neg, score=score)
+            yield instance
