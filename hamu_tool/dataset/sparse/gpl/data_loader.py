@@ -58,7 +58,7 @@ class GPLDataLoader(DataLoaderBase):
                 for line in fp:
                     data = json.loads(line)
                     self.hneg[model][data['qid']] = data['hneg']
-                    self.hneg[model].append((data['qid'], data['hneg']))
+                    self.hneg_list[model].append((data['qid'], data['hneg']))
         self.triple = {}
         triple_paths = glob.glob(f'{self.data_dir}/triple.*.tsv')
         for triple_path in triple_paths:
