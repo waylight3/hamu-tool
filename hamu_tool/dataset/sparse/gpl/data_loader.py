@@ -374,6 +374,20 @@ class GPLDataLoader(DataLoaderBase):
             instances.append(self.make_hneg_instance(qid=qid, did=did))
         return instances
 
+    def get_triple(self, idx : int, mode : str):
+        """Fetch the triple instance by its index.
+
+        Args:
+            idx (int): The index of the triple.
+            mode (str): Mode of the dataset.
+
+        Returns:
+            TripleInstance: The fetched triple instance.
+        """
+        qid, pos, neg, score = self.triple[mode][idx]
+        instance = self.make_triple_instance(qid=qid, pos=pos, neg=neg, score=score)
+        return instance
+
     def get_triples(self, mode : str):
         """Fetch all triples.
 
