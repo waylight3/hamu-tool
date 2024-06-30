@@ -82,6 +82,43 @@ class GPLDataLoader(DataLoaderBase):
             size = len(self.did_list[mode])
         return size
 
+    def total_queries(self, mode : str = None) -> int:
+        """Total number of queries in the dataset.
+
+        Args:
+            mode (str, optional): Mode of the dataset. Defaults to None.
+
+        Returns:
+            int: Total number of queries in the dataset.
+        """
+        if not mode:
+            size = len(self.reader_query)
+        else:
+            size = len(self.qid_list[mode])
+        return size
+
+    def total_qrels(self, mode : str) -> int:
+        """Total number of qrels in the dataset.
+
+        Args:
+            mode (str): Mode of the dataset.
+
+        Returns:
+            int: Total number of qrels in the dataset.
+        """
+        return len(self.qrel_list[mode])
+
+    def total_triples(self, mode : str) -> int:
+        """Total number of triples in the dataset.
+
+        Args:
+            mode (str): Mode of the dataset.
+
+        Returns:
+            int: Total number of triples in the dataset.
+        """
+        return len(self.triple[mode])
+
     def get_did(self, idx : int, mode : str = None) -> str:
         """Fetch the document ID by its index.
 
@@ -98,21 +135,6 @@ class GPLDataLoader(DataLoaderBase):
             did = self.did_list[mode][idx]
         return did
 
-    def total_queries(self, mode : str = None) -> int:
-        """Total number of queries in the dataset.
-
-        Args:
-            mode (str, optional): Mode of the dataset. Defaults to None.
-
-        Returns:
-            int: Total number of queries in the dataset.
-        """
-        if not mode:
-            size = len(self.reader_query)
-        else:
-            size = len(self.qid_list[mode])
-        return size
-
     def get_qid(self, idx : int, mode : str = None) -> str:
         """Fetch the query ID by its index.
 
@@ -127,17 +149,6 @@ class GPLDataLoader(DataLoaderBase):
         else:
             qid = self.qid_list[mode][idx]
         return qid
-
-    def total_qrels(self, mode : str) -> int:
-        """Total number of qrels in the dataset.
-
-        Args:
-            mode (str): Mode of the dataset.
-
-        Returns:
-            int: Total number of qrels in the dataset.
-        """
-        return len(self.qrel_list[mode])
 
     def make_query_instance(self, **kwargs):
         """Make a query instance.
