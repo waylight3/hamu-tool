@@ -48,7 +48,7 @@ class GPLDataLoader(DataLoaderBase):
                         self.did_set.add(did)
                         self.did_list[mode].append(did)
         self.hneg = {}
-        self.hneg_list = []
+        self.hneg_list = {}
         hneg_paths = glob.glob(f'{self.data_dir}/hneg.*.jsonl')
         for hneg_path in hneg_paths:
             model = hneg_path.split('.')[-2]
