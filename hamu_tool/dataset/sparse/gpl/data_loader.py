@@ -48,14 +48,17 @@ class GPLDataLoader(DataLoaderBase):
                         self.did_set.add(did)
                         self.did_list[mode].append(did)
         self.hneg = {}
+        self.hneg_list = []
         hneg_paths = glob.glob(f'{self.data_dir}/hneg.*.jsonl')
         for hneg_path in hneg_paths:
             model = hneg_path.split('.')[-2]
             self.hneg[model] = {}
+            self.hneg_list[model] = []
             with open(hneg_path, 'r', encoding='utf-8') as fp:
                 for line in fp:
                     data = json.loads(line)
                     self.hneg[model][data['qid']] = data['hneg']
+                    self.hneg[model].append((data['qid'], data['hneg']))
         self.triple = {}
         triple_paths = glob.glob(f'{self.data_dir}/triple.*.tsv')
         for triple_path in triple_paths:
@@ -107,6 +110,17 @@ class GPLDataLoader(DataLoaderBase):
             int: Total number of qrels in the dataset.
         """
         return len(self.qrel_list[mode])
+
+    def total_hnegs(self, model : str) -> int:
+        """Total number of hard negatives in the dataset.
+
+        Args:
+            model (str): The model name.
+
+        Returns:
+            int: Total number of hard negatives in the dataset.
+        """
+        return len(self.hneg_list[model])
 
     def total_triples(self, mode : str) -> int:
         """Total number of triples in the dataset.
